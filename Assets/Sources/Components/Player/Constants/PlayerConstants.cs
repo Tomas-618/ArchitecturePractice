@@ -1,0 +1,8 @@
+﻿namespace Assets.Sources.Components.Player.Constants
+{
+    public class PlayerConstants
+    {
+        public const float RotationThreshold = 0.001f;
+        public const float MinMoveDirectionY = -0.3f;
+    }
+}
