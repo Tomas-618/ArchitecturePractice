@@ -5,9 +5,9 @@ using Source.Infrastructure.Di;
 using Source.Infrastructure.StateMachine.Contracts;
 using Source.Infrastructure.StateMachine.States;
 using Source.Infrastructure.StateMachine.States.Contracts;
-using Source.Services;
-using Source.Services.AssetManagement;
 using Source.Services.Factories;
+using Source.Services.Progress.Contracts;
+using Source.Services.Scenes.Contracts;
 
 namespace Source.Infrastructure.StateMachine
 {
@@ -17,14 +17,18 @@ namespace Source.Infrastructure.StateMachine
 
         private IExitableState _current;
 
-        public GameStateMachine(DiContainer diContainer, SceneLoader sceneLoader,
+        public GameStateMachine(DiContainer diContainer, ISceneLoader sceneLoader,
             CurtainLoader curtainLoader)
         {
             _states = new Dictionary<Type, IExitableState>
             {
                 [typeof(BootstrapState)] = new BootstrapState(this, sceneLoader, diContainer),
-                [typeof(LoadLevelState)] = new LoadLevelState(this, sceneLoader, curtainLoader,
-                    diContainer.GetSingle<GameObjectsFactory>(), diContainer.GetSingle<AssetProvider>()),
+                [typeof(LoadProgressState)] = new LoadProgressState(this,
+                    diContainer.GetSingle<IPersistentProgressService>(),
+                    diContainer.GetSingle<ISaveLoadService>()),
+                [typeof(LoadLevelState)] = new LoadLevelState(this, sceneLoader,
+                diContainer.GetSingle<IPersistentProgressService>(), curtainLoader,
+                diContainer.GetSingle<PlayerFactory>()),
                 [typeof(GameLoopState)] = new GameLoopState()
             };
         }

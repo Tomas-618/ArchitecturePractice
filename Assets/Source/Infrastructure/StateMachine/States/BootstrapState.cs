@@ -2,22 +2,25 @@
 using Source.Infrastructure.Di;
 using Source.Infrastructure.StateMachine.Contracts;
 using Source.Infrastructure.StateMachine.States.Contracts;
-using Source.Services;
 using Source.Services.AssetManagement;
+using Source.Services.AssetManagement.Contracts;
 using Source.Services.Factories;
+using Source.Services.Input;
+using Source.Services.Input.Contracts;
+using Source.Services.Progress;
+using Source.Services.Progress.Contracts;
+using Source.Services.Scenes.Constants;
+using Source.Services.Scenes.Contracts;
 
 namespace Source.Infrastructure.StateMachine.States
 {
     public class BootstrapState : IState
     {
-        private const string InitialScene = "Initial";
-        private const string LaboratoryScene = "Laboratory";
-
         private readonly IGameStateMachine _gameStateMachine;
-        private readonly SceneLoader _sceneLoader;
+        private readonly ISceneLoader _sceneLoader;
         private readonly DiContainer _diContainer;
 
-        public BootstrapState(IGameStateMachine gameStateMachine, SceneLoader sceneLoader, DiContainer diContainer)
+        public BootstrapState(IGameStateMachine gameStateMachine, ISceneLoader sceneLoader, DiContainer diContainer)
         {
             _gameStateMachine = gameStateMachine ?? throw new ArgumentNullException(nameof(gameStateMachine));
             _sceneLoader = sceneLoader ?? throw new ArgumentNullException(nameof(sceneLoader));
@@ -27,18 +30,24 @@ namespace Source.Infrastructure.StateMachine.States
         }
 
         public void Enter() =>
-            _sceneLoader.LoadAsync(InitialScene, EnterLoadLevel);
+            _sceneLoader.LoadAsync(ScenesNames.InitialScene, EnterLoadProgress);
 
         public void Exit() { }
 
         private void RegisterServices()
         {
-            _diContainer.RegisterSingle(new InputService());
-            _diContainer.RegisterSingle(new AssetProvider());
-            _diContainer.RegisterSingle(new GameObjectsFactory());
+            _diContainer.RegisterSingle<IInputService>(new InputService());
+            _diContainer.RegisterSingle<IAssetProvider>(new AssetProvider());
+            _diContainer.RegisterSingle<IProgressRegisterService>(new ProgressRegisterService());
+            _diContainer.RegisterSingle(_sceneLoader);
+            _diContainer.RegisterSingle<IPersistentProgressService>(new PersistentProgressService
+                (_diContainer.GetSingle<IProgressRegisterService>()));
+            _diContainer.RegisterSingle<ISaveLoadService>(new SaveLoadService
+                (_diContainer.GetSingle<IPersistentProgressService>()));
+            _diContainer.RegisterSingle(new PlayerFactory(_diContainer.GetSingle<IAssetProvider>()));
         }
 
-        private void EnterLoadLevel() =>
-            _gameStateMachine.Enter<LoadLevelState, string>(LaboratoryScene);
+        private void EnterLoadProgress() =>
+            _gameStateMachine.Enter<LoadProgressState>();
     }
 }

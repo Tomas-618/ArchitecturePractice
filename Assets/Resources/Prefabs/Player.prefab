@@ -13,8 +13,8 @@ GameObject:
   - component: {fileID: 5305066248260304243}
   - component: {fileID: 3561966398740731062}
   - component: {fileID: 8678794925083885528}
-  - component: {fileID: 6398978710932793802}
-  m_Layer: 0
+  - component: {fileID: 4383125585870209756}
+  m_Layer: 7
   m_Name: Player
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -29,8 +29,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5159279637407745592}
   serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 1.1611556, y: 1, z: -8.073328}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -90,9 +90,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _sensitivity: 7
   _player: {fileID: 8126588909597394619}
-  _cameraTarget: {fileID: 8976042274614285841}
   _minAngle: -80
   _maxAngle: 80
+  <CameraTarget>k__BackingField: {fileID: 8976042274614285841}
 --- !u!114 &8678794925083885528
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -106,7 +106,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _strength: 0.5
---- !u!114 &6398978710932793802
+--- !u!114 &4383125585870209756
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -115,10 +115,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 5159279637407745592}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: baaf207ab208d3c4fb37d12aacd31a8e, type: 3}
+  m_Script: {fileID: 11500000, guid: 51bc51f56a7620d40ae0193778f9a141, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  <Target>k__BackingField: {fileID: 8976042274614285841}
 --- !u!1 &5228681257115867238
 GameObject:
   m_ObjectHideFlags: 0
@@ -128,7 +127,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8976042274614285841}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: CameraTarget
   m_TagString: Untagged
   m_Icon: {fileID: 0}

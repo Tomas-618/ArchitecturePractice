@@ -4,7 +4,8 @@ using Source.Infrastructure.Contracts;
 using Source.Infrastructure.Di;
 using Source.Infrastructure.StateMachine;
 using Source.Infrastructure.StateMachine.States;
-using Source.Services;
+using Source.Services.Input.Contracts;
+using Source.Services.Scenes;
 
 namespace Source.Infrastructure
 {
@@ -22,6 +23,6 @@ namespace Source.Infrastructure
         }
 
         public void Dispose() =>
-            _diContainer.GetSingle<InputService>().Dispose();
+            _diContainer.GetSingle<IInputService>().Dispose();
     }
 }

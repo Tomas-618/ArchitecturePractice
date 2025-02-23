@@ -1,6 +1,6 @@
 ﻿using Source.Components.Player.Constants;
 using Source.Infrastructure.Di;
-using Source.Services;
+using Source.Services.Input.Contracts;
 using UnityEngine;
 
 namespace Source.Components.Player
@@ -10,13 +10,13 @@ namespace Source.Components.Player
         [SerializeField, Min(0)] private float _sensitivity;
 
         [SerializeField] private Transform _player;
-        [SerializeField] private Transform _cameraTarget;
         [SerializeField] private float _minAngle;
         [SerializeField] private float _maxAngle;
 
-        private InputService _inputService;
-        private Vector2 _currentRotation;
+        private IInputService _inputService;
         private float _pitch;
+
+        [field: SerializeField] public Transform CameraTarget { get; private set; }
 
         private void OnValidate()
         {
@@ -25,29 +25,31 @@ namespace Source.Components.Player
         }
 
         private void Awake() =>
-            _inputService = DiContainer.GetInstance().GetSingle<InputService>();
+            _inputService = DiContainer.GetInstance().GetSingle<IInputService>();
 
         private void LateUpdate()
         {
-            CalculateRotation(_inputService.GetRotation());
+            Vector2 rotation = CalculateRotation(_inputService.GetRotation());
 
-            _cameraTarget.localRotation = Quaternion.Euler(Vector3.right * _currentRotation.y);
-            _player.Rotate(Vector3.up * _currentRotation.x);
+            CameraTarget.localRotation = Quaternion.Euler(Vector3.right * rotation.y);
+            _player.Rotate(Vector3.up * rotation.x);
         }
 
-        private void CalculateRotation(Vector3 input)
+        private Vector2 CalculateRotation(Vector3 input)
         {
-            _currentRotation.Set(0f, _pitch);
+            Vector2 rotation = new(0f, _pitch);
 
             if (input.sqrMagnitude < PlayerConstants.RotationThreshold)
-                return;
+                return rotation;
 
             float yaw = input.x * _sensitivity * Time.deltaTime;
 
             _pitch += input.y * _sensitivity * Time.deltaTime;
             _pitch = Mathf.Clamp(_pitch, _minAngle, _maxAngle);
 
-            _currentRotation.Set(yaw, _pitch);
+            rotation.Set(yaw, _pitch);
+
+            return rotation;
         }
     }
 }
