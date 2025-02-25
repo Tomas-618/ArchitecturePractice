@@ -27,8 +27,9 @@ namespace Source.Infrastructure.StateMachine
                     diContainer.GetSingle<IPersistentProgressService>(),
                     diContainer.GetSingle<ISaveLoadService>()),
                 [typeof(LoadLevelState)] = new LoadLevelState(this, sceneLoader,
-                diContainer.GetSingle<IPersistentProgressService>(), curtainLoader,
-                diContainer.GetSingle<PlayerFactory>()),
+                    diContainer.GetSingle<IPersistentProgressService>(),
+                    diContainer.GetSingle<IProgressRegisterService>(), curtainLoader,
+                    diContainer.GetSingle<PlayerFactory>()),
                 [typeof(GameLoopState)] = new GameLoopState()
             };
         }

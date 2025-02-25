@@ -38,13 +38,14 @@ namespace Source.Infrastructure.StateMachine.States
         {
             _diContainer.RegisterSingle<IInputService>(new InputService());
             _diContainer.RegisterSingle<IAssetProvider>(new AssetProvider());
-            _diContainer.RegisterSingle<IProgressRegisterService>(new ProgressRegisterService());
             _diContainer.RegisterSingle(_sceneLoader);
-            _diContainer.RegisterSingle<IPersistentProgressService>(new PersistentProgressService
-                (_diContainer.GetSingle<IProgressRegisterService>()));
+            _diContainer.RegisterSingle<IProgressRegisterService>(new ProgressRegisterService());
+            _diContainer.RegisterSingle<IPersistentProgressService>(new PersistentProgressService());
             _diContainer.RegisterSingle<ISaveLoadService>(new SaveLoadService
-                (_diContainer.GetSingle<IPersistentProgressService>()));
-            _diContainer.RegisterSingle(new PlayerFactory(_diContainer.GetSingle<IAssetProvider>()));
+                (_diContainer.GetSingle<IPersistentProgressService>(),
+                _diContainer.GetSingle<IProgressRegisterService>()));
+            _diContainer.RegisterSingle(new PlayerFactory(_diContainer.GetSingle<IAssetProvider>(),
+                _diContainer.GetSingle<IProgressRegisterService>()));
         }
 
         private void EnterLoadProgress() =>

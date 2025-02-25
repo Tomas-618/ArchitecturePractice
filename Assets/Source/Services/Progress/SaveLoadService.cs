@@ -12,12 +12,16 @@ namespace Source.Services.Progress
         private const string ProgressKey = "Save";
 
         private readonly IPersistentProgressService _persistentProgressService;
+        private readonly IProgressRegisterService _progressRegisterService;
         private readonly BinaryFormatter _binaryFormatter;
 
-        public SaveLoadService(IPersistentProgressService persistentProgressService)
+        public SaveLoadService(IPersistentProgressService persistentProgressService,
+            IProgressRegisterService progressRegisterService)
         {
             _persistentProgressService = persistentProgressService ??
                 throw new ArgumentNullException(nameof(persistentProgressService));
+            _progressRegisterService = progressRegisterService ??
+                throw new ArgumentNullException(nameof(progressRegisterService));
             _binaryFormatter = new BinaryFormatter();
         }
 
@@ -25,7 +29,7 @@ namespace Source.Services.Progress
         {
             PlayerProgress progress = _persistentProgressService.Progress;
 
-            _persistentProgressService.Update();
+            _progressRegisterService.UpdateProgress(progress);
 
             string path = BuildPath(ProgressKey);
 

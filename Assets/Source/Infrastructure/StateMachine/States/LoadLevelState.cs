@@ -18,17 +18,21 @@ namespace Source.Infrastructure.StateMachine.States
         private readonly IGameStateMachine _stateMachine;
         private readonly ISceneLoader _sceneLoader;
         private readonly IPersistentProgressService _persistentProgressService;
+        private readonly IProgressRegisterService _progressRegisterService;
         private readonly CurtainLoader _curtainLoader;
         private readonly PlayerFactory _factory;
 
         public LoadLevelState(IGameStateMachine stateMachine, ISceneLoader sceneLoader,
             IPersistentProgressService persistentProgressService,
-            CurtainLoader curtainLoader, PlayerFactory factory)
+            IProgressRegisterService progressRegisterService, CurtainLoader curtainLoader,
+            PlayerFactory factory)
         {
             _stateMachine = stateMachine ?? throw new ArgumentNullException(nameof(stateMachine));
             _sceneLoader = sceneLoader ?? throw new ArgumentNullException(nameof(sceneLoader));
-            _persistentProgressService = persistentProgressService
-                ?? throw new ArgumentNullException(nameof(persistentProgressService));
+            _persistentProgressService = persistentProgressService ??
+                throw new ArgumentNullException(nameof(persistentProgressService));
+            _progressRegisterService = progressRegisterService ??
+                throw new ArgumentNullException(nameof(progressRegisterService));
             _curtainLoader = curtainLoader != null ?
                 curtainLoader : throw new ArgumentNullException(nameof(curtainLoader));
             _factory = factory ?? throw new ArgumentNullException(nameof(factory));
@@ -37,7 +41,7 @@ namespace Source.Infrastructure.StateMachine.States
         public void Enter(string sceneName)
         {
             _curtainLoader.Show();
-            _persistentProgressService.ClearRegistered();
+            _progressRegisterService.Clear();
             _sceneLoader.LoadAsync(sceneName, OnLoaded);
         }
 
@@ -53,7 +57,7 @@ namespace Source.Infrastructure.StateMachine.States
         }
 
         private void InformProgressLoaders() =>
-            _persistentProgressService.Load();
+            _progressRegisterService.Load(_persistentProgressService.Progress);
 
         private void InitGameWorld()
         {
@@ -61,7 +65,6 @@ namespace Source.Infrastructure.StateMachine.States
 
             PlayerRotator player = _factory.Create(initialPoint.position, initialPoint.rotation);
 
-            _persistentProgressService.Regist(player.gameObject);
             SetCameraTarget(player.CameraTarget);
         }
 
