@@ -39,8 +39,8 @@ namespace Source.Infrastructure.StateMachine.States
             _diContainer.RegisterSingle<IInputService>(new InputService());
             _diContainer.RegisterSingle<IAssetProvider>(new AssetProvider());
             _diContainer.RegisterSingle(_sceneLoader);
-            _diContainer.RegisterSingle<IProgressRegisterService>(new ProgressRegisterService());
             _diContainer.RegisterSingle<IPersistentProgressService>(new PersistentProgressService());
+            _diContainer.RegisterSingle<IProgressRegisterService>(new ProgressRegisterService());
             _diContainer.RegisterSingle<ISaveLoadService>(new SaveLoadService
                 (_diContainer.GetSingle<IPersistentProgressService>(),
                 _diContainer.GetSingle<IProgressRegisterService>()));

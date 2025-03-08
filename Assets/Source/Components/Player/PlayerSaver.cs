@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace Source.Components.Player
 {
-	public class Saver : MonoBehaviour
+	public class PlayerSaver : MonoBehaviour
 	{
 		private IInputService _inputService;
 		private ISaveLoadService _saveLoadService;
