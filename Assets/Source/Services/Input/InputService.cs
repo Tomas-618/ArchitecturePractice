@@ -37,7 +37,7 @@ namespace Source.Services.Input
 
         public Vector2 GetRotation()
         {
-            Vector2 rotation = _inputActions.Player.Look.ReadValue<Vector2>();
+            var rotation = _inputActions.Player.Look.ReadValue<Vector2>();
 
             return rotation;
         }

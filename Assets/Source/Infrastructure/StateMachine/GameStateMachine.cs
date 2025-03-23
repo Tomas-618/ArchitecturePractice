@@ -1,6 +1,6 @@
 ﻿using System;
-using Source.Components.Curtain;
 using System.Collections.Generic;
+using Source.Components.Curtain;
 using Source.Infrastructure.Di;
 using Source.Infrastructure.StateMachine.Contracts;
 using Source.Infrastructure.StateMachine.States;

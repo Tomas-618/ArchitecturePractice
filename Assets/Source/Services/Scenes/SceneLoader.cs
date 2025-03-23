@@ -2,7 +2,6 @@
 using System.Collections;
 using Source.Infrastructure.Contracts;
 using Source.Services.Scenes.Contracts;
-using UnityEngine;
 using UnityEngine.SceneManagement;
 
 namespace Source.Services.Scenes
@@ -26,7 +25,7 @@ namespace Source.Services.Scenes
                 yield break;
             }
 
-            AsyncOperation operation = SceneManager.LoadSceneAsync(name);
+            var operation = SceneManager.LoadSceneAsync(name);
 
             while (operation.isDone == false)
                 yield return null;

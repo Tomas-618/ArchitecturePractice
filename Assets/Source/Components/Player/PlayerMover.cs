@@ -26,15 +26,15 @@ namespace Source.Components.Player
 
         private void Update()
         {
-            Vector3 direction = _inputService.GetMoveDirection();
+            var direction = _inputService.GetMoveDirection();
 
             _characterController.SimpleMove(_speed *
-                _transform.TransformDirection(direction));
+                                            _transform.TransformDirection(direction));
         }
 
         public void UpdateProgress(PlayerProgress playerProgress)
         {
-            LevelData levelData = playerProgress.WorldData.LevelData;
+            var levelData = playerProgress.WorldData.LevelData;
 
             levelData.SceneName = SceneManager.GetActiveScene().name;
             levelData.Position = new Vector3Surrogate(_transform.position);
@@ -42,7 +42,7 @@ namespace Source.Components.Player
 
         public void LoadProgress(PlayerProgress playerProgress)
         {
-            LevelData levelData = playerProgress.WorldData.LevelData;
+            var levelData = playerProgress.WorldData.LevelData;
 
             if (SceneManager.GetActiveScene().name != levelData.SceneName)
                 return;

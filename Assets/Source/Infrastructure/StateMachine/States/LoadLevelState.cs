@@ -1,7 +1,6 @@
 ﻿using System;
 using Source.Components.Camera;
 using Source.Components.Curtain;
-using Source.Components.Player;
 using Source.Infrastructure.StateMachine.Contracts;
 using Source.Infrastructure.StateMachine.States.Contracts;
 using Source.Services.Factories;
@@ -61,9 +60,9 @@ namespace Source.Infrastructure.StateMachine.States
 
         private void InitGameWorld()
         {
-            Transform initialPoint = GameObject.FindWithTag(InitialPointTag).transform;
+            var initialPoint = GameObject.FindWithTag(InitialPointTag).transform;
 
-            PlayerRotator player = _factory.Create(initialPoint.position, initialPoint.rotation);
+            var player = _factory.Create(initialPoint.position, initialPoint.rotation);
 
             SetCameraTarget(player.CameraTarget);
         }

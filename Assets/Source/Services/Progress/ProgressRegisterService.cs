@@ -1,5 +1,5 @@
-﻿using Source.Data;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using Source.Data;
 using Source.Services.Progress.Contracts;
 using UnityEngine;
 
@@ -16,10 +16,10 @@ namespace Source.Services.Progress
             _savers = new List<IProgressSaver>();
         }
 
-        public void RegistChildrenWatchers(GameObject gameObject)
+        public void RegisterChildrenWatchers(GameObject gameObject)
         {
-            foreach (IProgressLoader children in gameObject.GetComponentsInChildren<IProgressLoader>())
-                Regist(children);
+            foreach (var children in gameObject.GetComponentsInChildren<IProgressLoader>())
+                Register(children);
         }
 
         public void Clear()
@@ -30,17 +30,17 @@ namespace Source.Services.Progress
 
         public void UpdateProgress(PlayerProgress progress)
         {
-            foreach (IProgressSaver progressSaver in _savers)
+            foreach (var progressSaver in _savers)
                 progressSaver.UpdateProgress(progress);
         }
 
         public void Load(PlayerProgress progress)
         {
-            foreach (IProgressLoader progressLoader in _loaders)
+            foreach (var progressLoader in _loaders)
                 progressLoader.LoadProgress(progress);
         }
 
-        private void Regist(IProgressLoader loader)
+        private void Register(IProgressLoader loader)
         {
             if (loader is IProgressSaver saver)
                 _savers.Add(saver);

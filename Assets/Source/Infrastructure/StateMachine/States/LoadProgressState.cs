@@ -28,12 +28,15 @@ namespace Source.Infrastructure.StateMachine.States
                 .Progress.WorldData.LevelData.SceneName);
         }
 
-        public void Exit() { }
+        public void Exit()
+        {
+        }
 
         private void LoadOrCreateProgress()
         {
-            _progressService.Progress = _saveLoadService.TryLoad(out PlayerProgress progress)
-                ? progress : CreateProgress();
+            _progressService.Progress = _saveLoadService.TryLoad(out var playerProgress)
+                ? playerProgress
+                : CreateProgress();
         }
 
         private PlayerProgress CreateProgress() =>

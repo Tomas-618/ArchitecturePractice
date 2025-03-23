@@ -29,7 +29,7 @@ namespace Source.Components.Player
 
         private void LateUpdate()
         {
-            Vector2 rotation = CalculateRotation(_inputService.GetRotation());
+            var rotation = CalculateRotation(_inputService.GetRotation());
 
             CameraTarget.localRotation = Quaternion.Euler(Vector3.right * rotation.y);
             _player.Rotate(Vector3.up * rotation.x);

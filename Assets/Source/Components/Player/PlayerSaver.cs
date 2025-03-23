@@ -12,7 +12,7 @@ namespace Source.Components.Player
 
         private void Awake()
         {
-            DiContainer diContainer = DiContainer.GetInstance();
+            var diContainer = DiContainer.GetInstance();
 
             _inputService = diContainer.GetSingle<IInputService>();
             _saveLoadService = diContainer.GetSingle<ISaveLoadService>();

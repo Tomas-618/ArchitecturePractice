@@ -5,7 +5,7 @@ namespace Source.Services.Progress.Contracts
 {
     public interface IProgressRegisterService
     {
-        void RegistChildrenWatchers(GameObject gameObject);
+        void RegisterChildrenWatchers(GameObject gameObject);
 
         void UpdateProgress(PlayerProgress progress);
 

@@ -9,7 +9,7 @@ namespace Source.Components.Player
 
         private void OnControllerColliderHit(ControllerColliderHit hit)
         {
-            Rigidbody targetRigidbody = hit.rigidbody;
+            var targetRigidbody = hit.rigidbody;
 
             if (targetRigidbody == null || targetRigidbody.isKinematic)
                 return;
@@ -17,7 +17,7 @@ namespace Source.Components.Player
             if (hit.moveDirection.y < PlayerConstants.MinMoveDirectionY)
                 return;
 
-            Vector3 pushDirection = new Vector3(hit.moveDirection.x, 0f, hit.moveDirection.z);
+            var pushDirection = new Vector3(hit.moveDirection.x, 0f, hit.moveDirection.z);
 
             targetRigidbody.AddForce(pushDirection * _strength, ForceMode.Impulse);
         }

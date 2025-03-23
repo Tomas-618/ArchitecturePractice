@@ -22,12 +22,12 @@ namespace Source.Services.Factories
         public PlayerRotator Create(Vector3 position, Quaternion rotation,
             Transform parent = null)
         {
-            PlayerRotator playerPrefab = _assetProvider.LoadPrefab<PlayerRotator>
+            var playerPrefab = _assetProvider.LoadPrefab<PlayerRotator>
                 (AssetsPaths.PlayerPath);
 
-            PlayerRotator player = UnityEngine.Object.Instantiate(playerPrefab, position, rotation, parent);
+            var player = UnityEngine.Object.Instantiate(playerPrefab, position, rotation, parent);
 
-            _progressRegisterService.RegistChildrenWatchers(player.gameObject);
+            _progressRegisterService.RegisterChildrenWatchers(player.gameObject);
 
             return player;
         }

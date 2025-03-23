@@ -1,7 +1,7 @@
 ﻿using System;
-using Source.Data;
 using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
+using Source.Data;
 using Source.Services.Progress.Contracts;
 using UnityEngine;
 
@@ -27,13 +27,13 @@ namespace Source.Services.Progress
 
         public void Save()
         {
-            PlayerProgress progress = _persistentProgressService.Progress;
+            var progress = _persistentProgressService.Progress;
 
             _progressRegisterService.UpdateProgress(progress);
 
             string path = BuildPath(ProgressKey);
 
-            using FileStream stream = File.Open(path, FileMode.OpenOrCreate);
+            using var stream = File.Open(path, FileMode.OpenOrCreate);
 
             _binaryFormatter.Serialize(stream, progress);
         }
@@ -47,7 +47,7 @@ namespace Source.Services.Progress
             if (File.Exists(path) == false)
                 return false;
 
-            using FileStream stream = File.Open(path, FileMode.Open);
+            using var stream = File.Open(path, FileMode.Open);
 
             progress = _binaryFormatter.Deserialize(stream) as PlayerProgress;
 
