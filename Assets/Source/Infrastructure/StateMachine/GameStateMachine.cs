@@ -22,13 +22,14 @@ namespace Source.Infrastructure.StateMachine
         {
             _states = new Dictionary<Type, IExitableState>
             {
-                [typeof(BootstrapState)] = new BootstrapState(this, sceneLoader, diContainer),
+                [typeof(BootstrapState)] = new BootstrapState(this, sceneLoader, curtainLoader, diContainer),
                 [typeof(LoadProgressState)] = new LoadProgressState(this,
                     diContainer.GetSingle<IPersistentProgressService>(),
                     diContainer.GetSingle<ISaveLoadService>()),
                 [typeof(LoadLevelState)] = new LoadLevelState(this, sceneLoader,
                     diContainer.GetSingle<IPersistentProgressService>(),
-                    diContainer.GetSingle<IProgressRegisterService>(), curtainLoader,
+                    diContainer.GetSingle<IProgressRegisterService>(),
+                    diContainer.GetSingle<CurtainLoader>(),
                     diContainer.GetSingle<PlayerFactory>()),
                 [typeof(GameLoopState)] = new GameLoopState()
             };

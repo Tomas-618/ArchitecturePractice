@@ -1,4 +1,5 @@
 ﻿using System;
+using Source.Components.Curtain;
 using Source.Infrastructure.Di;
 using Source.Infrastructure.StateMachine.Contracts;
 using Source.Infrastructure.StateMachine.States.Contracts;
@@ -18,11 +19,14 @@ namespace Source.Infrastructure.StateMachine.States
     {
         private readonly IGameStateMachine _gameStateMachine;
         private readonly ISceneLoader _sceneLoader;
+        private readonly CurtainLoader _curtainLoader;
         private readonly DiContainer _diContainer;
 
-        public BootstrapState(IGameStateMachine gameStateMachine, ISceneLoader sceneLoader, DiContainer diContainer)
+        public BootstrapState(IGameStateMachine gameStateMachine, ISceneLoader sceneLoader,
+            CurtainLoader curtainLoader, DiContainer diContainer)
         {
             _gameStateMachine = gameStateMachine ?? throw new ArgumentNullException(nameof(gameStateMachine));
+            _curtainLoader = curtainLoader != null ? curtainLoader : throw new ArgumentNullException(nameof(curtainLoader));
             _sceneLoader = sceneLoader ?? throw new ArgumentNullException(nameof(sceneLoader));
             _diContainer = diContainer ?? throw new ArgumentNullException(nameof(diContainer));
 
@@ -32,17 +36,20 @@ namespace Source.Infrastructure.StateMachine.States
         public void Enter() =>
             _sceneLoader.LoadAsync(ScenesNames.InitialScene, EnterLoadProgress);
 
-        public void Exit() { }
+        public void Exit()
+        {
+        }
 
         private void RegisterServices()
         {
             _diContainer.RegisterSingle<IInputService>(new InputService());
             _diContainer.RegisterSingle<IAssetProvider>(new AssetProvider());
             _diContainer.RegisterSingle(_sceneLoader);
+            _diContainer.RegisterSingle(_curtainLoader);
             _diContainer.RegisterSingle<IPersistentProgressService>(new PersistentProgressService());
             _diContainer.RegisterSingle<IProgressRegisterService>(new ProgressRegisterService());
             _diContainer.RegisterSingle<ISaveLoadService>(new SaveLoadService
-                (_diContainer.GetSingle<IPersistentProgressService>(),
+            (_diContainer.GetSingle<IPersistentProgressService>(),
                 _diContainer.GetSingle<IProgressRegisterService>()));
             _diContainer.RegisterSingle(new PlayerFactory(_diContainer.GetSingle<IAssetProvider>(),
                 _diContainer.GetSingle<IProgressRegisterService>()));
