@@ -1,13 +1,14 @@
 using System;
+using Source.Data.Contracts;
+using Source.Data.Surrogates;
 
 namespace Source.Data
 {
     [Serializable]
-    public class PlayerProgress
+    public class PlayerProgress : IReadOnlyPlayerProgress
     {
-        public PlayerProgress(string sceneName) =>
-            WorldData = new WorldData(sceneName);
+        public string SceneName { get; set; }
 
-        public WorldData WorldData { get; }
+        public Vector3Surrogate Position { get; set; }
     }
 }

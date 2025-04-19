@@ -5,7 +5,10 @@ using Source.Infrastructure.Di;
 using Source.Infrastructure.StateMachine;
 using Source.Infrastructure.StateMachine.States;
 using Source.Services.Input.Contracts;
+using Source.Services.Progress;
+using Source.Services.Progress.Contracts;
 using Source.Services.Scenes;
+using Source.Services.Scenes.Constants;
 
 namespace Source.Infrastructure
 {
@@ -16,8 +19,11 @@ namespace Source.Infrastructure
 
         public Game(ICoroutineRunner coroutineRunner, DiContainer diContainer, CurtainLoader curtainLoader)
         {
+            IActiveScene activeScene = new ActiveScene(ScenesNames.InitialScene);
+
             _diContainer = diContainer ?? throw new ArgumentNullException(nameof(diContainer));
-            _stateMachine = new GameStateMachine(diContainer, new SceneLoader(coroutineRunner), curtainLoader);
+            _stateMachine = new GameStateMachine(diContainer, new SceneLoader(coroutineRunner, activeScene),
+                activeScene, curtainLoader);
 
             _stateMachine.Enter<BootstrapState>();
         }

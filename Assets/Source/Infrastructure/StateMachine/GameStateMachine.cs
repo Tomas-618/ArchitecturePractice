@@ -18,17 +18,19 @@ namespace Source.Infrastructure.StateMachine
         private IExitableState _current;
 
         public GameStateMachine(DiContainer diContainer, ISceneLoader sceneLoader,
-            CurtainLoader curtainLoader)
+            IActiveScene activeScene, CurtainLoader curtainLoader)
         {
             _states = new Dictionary<Type, IExitableState>
             {
-                [typeof(BootstrapState)] = new BootstrapState(this, sceneLoader, curtainLoader, diContainer),
+                [typeof(BootstrapState)] =
+                    new BootstrapState(this, sceneLoader, activeScene, curtainLoader, diContainer),
                 [typeof(LoadProgressState)] = new LoadProgressState(this,
                     diContainer.GetSingle<IPersistentProgressService>(),
                     diContainer.GetSingle<ISaveLoadService>()),
                 [typeof(LoadLevelState)] = new LoadLevelState(this, sceneLoader,
                     diContainer.GetSingle<IPersistentProgressService>(),
                     diContainer.GetSingle<IProgressRegisterService>(),
+                    diContainer.GetSingle<IActiveScene>(),
                     diContainer.GetSingle<CurtainLoader>(),
                     diContainer.GetSingle<PlayerFactory>()),
                 [typeof(GameLoopState)] = new GameLoopState()

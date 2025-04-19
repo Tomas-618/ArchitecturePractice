@@ -18,22 +18,25 @@ namespace Source.Infrastructure.StateMachine.States
         private readonly ISceneLoader _sceneLoader;
         private readonly IPersistentProgressService _persistentProgressService;
         private readonly IProgressRegisterService _progressRegisterService;
+        private readonly IActiveScene _activeScene;
         private readonly CurtainLoader _curtainLoader;
         private readonly PlayerFactory _factory;
 
         public LoadLevelState(IGameStateMachine stateMachine, ISceneLoader sceneLoader,
             IPersistentProgressService persistentProgressService,
-            IProgressRegisterService progressRegisterService, CurtainLoader curtainLoader,
-            PlayerFactory factory)
+            IProgressRegisterService progressRegisterService, IActiveScene activeScene,
+            CurtainLoader curtainLoader, PlayerFactory factory)
         {
             _stateMachine = stateMachine ?? throw new ArgumentNullException(nameof(stateMachine));
             _sceneLoader = sceneLoader ?? throw new ArgumentNullException(nameof(sceneLoader));
             _persistentProgressService = persistentProgressService ??
-                throw new ArgumentNullException(nameof(persistentProgressService));
+                                         throw new ArgumentNullException(nameof(persistentProgressService));
             _progressRegisterService = progressRegisterService ??
-                throw new ArgumentNullException(nameof(progressRegisterService));
-            _curtainLoader = curtainLoader != null ?
-                curtainLoader : throw new ArgumentNullException(nameof(curtainLoader));
+                                       throw new ArgumentNullException(nameof(progressRegisterService));
+            _activeScene = activeScene ?? throw new ArgumentNullException(nameof(activeScene));
+            _curtainLoader = curtainLoader != null
+                ? curtainLoader
+                : throw new ArgumentNullException(nameof(curtainLoader));
             _factory = factory ?? throw new ArgumentNullException(nameof(factory));
         }
 
@@ -47,9 +50,9 @@ namespace Source.Infrastructure.StateMachine.States
         public void Exit() =>
             _curtainLoader.Hide();
 
-        private void OnLoaded()
+        private void OnLoaded(string sceneName)
         {
-            InitGameWorld();
+            InitGameWorld(sceneName);
             InformProgressLoaders();
 
             _stateMachine.Enter<GameLoopState>();
@@ -58,13 +61,14 @@ namespace Source.Infrastructure.StateMachine.States
         private void InformProgressLoaders() =>
             _progressRegisterService.Load(_persistentProgressService.Progress);
 
-        private void InitGameWorld()
+        private void InitGameWorld(string sceneName)
         {
             var initialPoint = GameObject.FindWithTag(InitialPointTag).transform;
 
             var player = _factory.Create(initialPoint.position, initialPoint.rotation);
 
             SetCameraTarget(player.CameraTarget);
+            _activeScene.Update(sceneName);
         }
 
         private void SetCameraTarget(Transform target)

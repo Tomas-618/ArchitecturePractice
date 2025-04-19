@@ -19,15 +19,17 @@ namespace Source.Infrastructure.StateMachine.States
     {
         private readonly IGameStateMachine _gameStateMachine;
         private readonly ISceneLoader _sceneLoader;
+        private readonly IActiveScene _activeScene;
         private readonly CurtainLoader _curtainLoader;
         private readonly DiContainer _diContainer;
 
         public BootstrapState(IGameStateMachine gameStateMachine, ISceneLoader sceneLoader,
-            CurtainLoader curtainLoader, DiContainer diContainer)
+            IActiveScene activeScene, CurtainLoader curtainLoader, DiContainer diContainer)
         {
             _gameStateMachine = gameStateMachine ?? throw new ArgumentNullException(nameof(gameStateMachine));
-            _curtainLoader = curtainLoader != null ? curtainLoader : throw new ArgumentNullException(nameof(curtainLoader));
             _sceneLoader = sceneLoader ?? throw new ArgumentNullException(nameof(sceneLoader));
+            _activeScene = activeScene ?? throw new ArgumentNullException(nameof(activeScene));
+            _curtainLoader = curtainLoader != null ? curtainLoader : throw new ArgumentNullException(nameof(curtainLoader));
             _diContainer = diContainer ?? throw new ArgumentNullException(nameof(diContainer));
 
             RegisterServices();
@@ -46,6 +48,7 @@ namespace Source.Infrastructure.StateMachine.States
             _diContainer.RegisterSingle<IAssetProvider>(new AssetProvider());
             _diContainer.RegisterSingle(_sceneLoader);
             _diContainer.RegisterSingle(_curtainLoader);
+            _diContainer.RegisterSingle(_activeScene);
             _diContainer.RegisterSingle<IPersistentProgressService>(new PersistentProgressService());
             _diContainer.RegisterSingle<IProgressRegisterService>(new ProgressRegisterService());
             _diContainer.RegisterSingle<ISaveLoadService>(new SaveLoadService
@@ -55,7 +58,7 @@ namespace Source.Infrastructure.StateMachine.States
                 _diContainer.GetSingle<IProgressRegisterService>()));
         }
 
-        private void EnterLoadProgress() =>
+        private void EnterLoadProgress(string sceneName) =>
             _gameStateMachine.Enter<LoadProgressState>();
     }
 }

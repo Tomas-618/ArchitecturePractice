@@ -24,8 +24,7 @@ namespace Source.Infrastructure.StateMachine.States
         public void Enter()
         {
             LoadOrCreateProgress();
-            _gameStateMachine.Enter<LoadLevelState, string>(_progressService
-                .Progress.WorldData.LevelData.SceneName);
+            _gameStateMachine.Enter<LoadLevelState, string>(_progressService.Progress.SceneName);
         }
 
         public void Exit()
@@ -40,6 +39,9 @@ namespace Source.Infrastructure.StateMachine.States
         }
 
         private PlayerProgress CreateProgress() =>
-            new(ScenesNames.LaboratoryScene);
+            new()
+            {
+                SceneName = ScenesNames.LaboratoryScene
+            };
     }
 }

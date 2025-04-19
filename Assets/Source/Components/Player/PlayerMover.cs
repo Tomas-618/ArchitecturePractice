@@ -1,4 +1,5 @@
 using Source.Data;
+using Source.Data.Contracts;
 using Source.Data.Surrogates;
 using Source.Infrastructure.Di;
 using Source.Services.Input.Contracts;
@@ -16,10 +17,14 @@ namespace Source.Components.Player
 
         private Transform _transform;
         private IInputService _inputService;
+        private IActiveScene _activeScene;
 
         private void Awake()
         {
-            _inputService = DiContainer.GetInstance().GetSingle<IInputService>();
+            var diContainer = DiContainer.GetInstance();
+
+            _inputService = diContainer.GetSingle<IInputService>();
+            _activeScene =  diContainer.GetSingle<IActiveScene>();
 
             _transform = transform;
         }
@@ -32,26 +37,21 @@ namespace Source.Components.Player
                                             _transform.TransformDirection(direction));
         }
 
-        public void UpdateProgress(PlayerProgress playerProgress)
+        public void UpdateProgress(PlayerProgress playerProgress) =>
+            playerProgress.Position = new Vector3Surrogate(_transform.position);
+
+        public void LoadProgress(IReadOnlyPlayerProgress playerProgress)
         {
-            var levelData = playerProgress.WorldData.LevelData;
-
-            levelData.SceneName = SceneManager.GetActiveScene().name;
-            levelData.Position = new Vector3Surrogate(_transform.position);
-        }
-
-        public void LoadProgress(PlayerProgress playerProgress)
-        {
-            var levelData = playerProgress.WorldData.LevelData;
-
-            if (SceneManager.GetActiveScene().name != levelData.SceneName)
+            if (_activeScene.Name != playerProgress.SceneName)
                 return;
 
-            if (levelData.Position.IsValid == false)
+            var position =  playerProgress.Position;
+
+            if (position.IsValid == false)
                 return;
 
             _characterController.enabled = false;
-            _transform.position = levelData.Position.ConvertToVector3();
+            _transform.position = position.ConvertToVector3();
             _characterController.enabled = true;
         }
     }

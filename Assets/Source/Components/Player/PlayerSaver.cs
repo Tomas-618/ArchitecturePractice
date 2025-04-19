@@ -22,7 +22,7 @@ namespace Source.Components.Player
             _inputService.SavedButtonPressed += OnSaveButtonPressed;
 
         private void OnDisable() =>
-            _inputService.SavedButtonPressed += OnSaveButtonPressed;
+            _inputService.SavedButtonPressed -= OnSaveButtonPressed;
 
         private void OnSaveButtonPressed() =>
             _saveLoadService.Save();
