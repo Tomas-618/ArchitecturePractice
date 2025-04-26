@@ -1,4 +1,5 @@
-﻿using Source.Components.Curtain;
+﻿using System;
+using Source.Components.Curtain;
 using Source.Infrastructure.Contracts;
 using Source.Infrastructure.Di;
 using UnityEngine;
