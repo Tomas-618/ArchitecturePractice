@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Threading;
-using Cysharp.Threading.Tasks;
 using Source.Components.Curtain;
 using Source.Infrastructure.StateMachine.Contracts;
 using Source.Infrastructure.StateMachine.States;
@@ -36,22 +34,25 @@ namespace Source.Infrastructure.StateMachine
             };
         }
 
-        public async UniTask EnterAsync<TState>(CancellationToken token) where TState : class, IAsyncState
+        public void Enter<TState>() where TState : class, IState
         {
-            IAsyncState nextAsyncState = GetState<TState>();
-
-            ChangeState(nextAsyncState);
-            await nextAsyncState.EnterAsync(token);
-        }
-
-        public async UniTask EnterAsync<TPayLoadedState, TPayload>(TPayload payload, CancellationToken token)
-            where TPayLoadedState : class, IPayloadedAsyncState<TPayload>
-        {
-            IPayloadedAsyncState<TPayload> nextState = GetState<TPayLoadedState>();
+            IState nextState = GetState<TState>();
 
             ChangeState(nextState);
-            await nextState.EnterAsync(payload, token);
+            nextState.Enter();
         }
+
+        public void Enter<TPayLoadedState, TPayload>(TPayload payload)
+            where TPayLoadedState : class, IPayloadedState<TPayload>
+        {
+            IPayloadedState<TPayload> nextState = GetState<TPayLoadedState>();
+
+            ChangeState(nextState);
+            nextState.Enter(payload);
+        }
+
+        public void Dispose() =>
+            _current?.Dispose();
 
         private void ChangeState(IExitableState state)
         {

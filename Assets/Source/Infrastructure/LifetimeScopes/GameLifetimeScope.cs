@@ -10,6 +10,7 @@ using Source.Services.Progress.Contracts;
 using Source.Services.Scenes;
 using Source.Services.Scenes.Contracts;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using VContainer;
 using VContainer.Unity;
 
@@ -33,7 +34,8 @@ namespace Source.Infrastructure.LifetimeScopes
             builder.Register<IInputService, InputService>(Lifetime.Singleton);
             builder.Register<IAssetProvider, ResourcesAssetProvider>(Lifetime.Singleton);
             builder.Register<ISceneLoader, SceneLoader>(Lifetime.Singleton);
-            builder.Register<IActiveScene, ActiveScene>(Lifetime.Singleton);
+            builder.Register<IActiveScene, ActiveScene>(Lifetime.Singleton)
+                .WithParameter("name", SceneManager.GetActiveScene().name);
             builder.Register<IPersistentProgressService, PersistentProgressService>(Lifetime.Singleton);
             builder.Register<IProgressRegisterService, ProgressRegisterService>(Lifetime.Singleton);
             builder.Register<ISaveLoadService, BinarySaveLoadService>(Lifetime.Singleton);

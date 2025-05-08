@@ -1,18 +1,17 @@
-﻿using System.Threading;
-using Cysharp.Threading.Tasks;
-using Source.Infrastructure.StateMachine.States.Contracts;
+﻿using Source.Infrastructure.StateMachine.States.Contracts;
 using UnityEngine;
 
 namespace Source.Infrastructure.StateMachine.States
 {
-    public class GameLoopState : IAsyncState
+    public class GameLoopState : IState
     {
-        public async UniTask EnterAsync(CancellationToken token)
-        {
+        public void Enter() =>
             Cursor.lockState = CursorLockMode.Locked;
-        }
 
-        public void Exit()
+        public void Exit() =>
+            Dispose();
+
+        public void Dispose()
         {
         }
     }

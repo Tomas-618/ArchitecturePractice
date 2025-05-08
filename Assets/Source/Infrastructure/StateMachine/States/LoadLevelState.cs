@@ -15,7 +15,7 @@ using VContainer.Unity;
 
 namespace Source.Infrastructure.StateMachine.States
 {
-    public class LoadLevelState : IPayloadedAsyncState<string>
+    public class LoadLevelState : IPayloadedState<string>
     {
         private readonly IGameStateMachine _stateMachine;
         private readonly ISceneLoader _sceneLoader;
@@ -23,6 +23,8 @@ namespace Source.Infrastructure.StateMachine.States
         private readonly IProgressRegisterService _progressRegisterService;
         private readonly CurtainLoader _curtainLoader;
         private readonly IPlayerFactory _factory;
+
+        private CancellationTokenSource _cancellationTokenSource;
 
         public LoadLevelState(IGameStateMachine stateMachine, ISceneLoader sceneLoader,
             IPersistentProgressService persistentProgressService,
@@ -41,24 +43,44 @@ namespace Source.Infrastructure.StateMachine.States
             _factory = factory ?? throw new ArgumentNullException(nameof(factory));
         }
 
-        public async UniTask EnterAsync(string sceneName, CancellationToken token)
+        public void Enter(string sceneName)
         {
             _curtainLoader.Show();
             _progressRegisterService.Clear();
 
-            await _sceneLoader.LoadAsync(sceneName, token);
-            await OnLoadedAsync(token);
+            LoadSceneAsync(sceneName).Forget();
         }
 
-        public void Exit() =>
+        public void Exit()
+        {
+            Dispose();
             _curtainLoader.Hide();
+        }
 
-        private async UniTask OnLoadedAsync(CancellationToken token)
+        public void Dispose()
+        {
+            _cancellationTokenSource?.Cancel();
+            _cancellationTokenSource?.Dispose();
+            _cancellationTokenSource = null;
+        }
+
+        private async UniTaskVoid LoadSceneAsync(string sceneName)
+        {
+            _cancellationTokenSource = new CancellationTokenSource();
+
+            var cancellationToken = _cancellationTokenSource.Token;
+
+            await _sceneLoader.LoadAsync(sceneName, cancellationToken);
+
+            OnLoadedAsync(cancellationToken).Forget();
+        }
+
+        private async UniTaskVoid OnLoadedAsync(CancellationToken token)
         {
             await InitGameWorld(token);
             InformProgressLoaders();
 
-            await _stateMachine.EnterAsync<GameLoopState>(token);
+            _stateMachine.Enter<GameLoopState>();
         }
 
         private void InformProgressLoaders() =>

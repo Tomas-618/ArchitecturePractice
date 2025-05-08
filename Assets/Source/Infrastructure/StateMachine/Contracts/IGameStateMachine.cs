@@ -1,15 +1,13 @@
-﻿using System.Threading;
-using Cysharp.Threading.Tasks;
+﻿using System;
 using Source.Infrastructure.StateMachine.States.Contracts;
-using UnityEngine;
 
 namespace Source.Infrastructure.StateMachine.Contracts
 {
-    public interface IGameStateMachine
+    public interface IGameStateMachine : IDisposable
     {
-        UniTask EnterAsync<TState>(CancellationToken token) where TState : class, IAsyncState;
+        void Enter<TState>() where TState : class, IState;
 
-        UniTask EnterAsync<TPayLoadedState, TPayload>(TPayload payload, CancellationToken token)
-            where TPayLoadedState : class, IPayloadedAsyncState<TPayload>;
+        void Enter<TPayLoadedState, TPayload>(TPayload payload)
+            where TPayLoadedState : class, IPayloadedState<TPayload>;
     }
 }

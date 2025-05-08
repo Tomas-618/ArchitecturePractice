@@ -12,7 +12,7 @@ using VContainer.Unity;
 
 namespace Source.Infrastructure
 {
-    public class Bootstrapper : IAsyncStartable
+    public class Bootstrapper : IAsyncStartable, IDisposable
     {
         private readonly IGameStateMachine _stateMachine;
         private readonly ISceneLoader _sceneLoader;
@@ -32,11 +32,16 @@ namespace Source.Infrastructure
             try
             {
                 await _sceneLoader.LoadAsync(ScenesNames.InitialScene, cancellation);
-                await _stateMachine.EnterAsync<LoadProgressState>(cancellation);
             }
             catch (OperationCanceledException)
             {
             }
+
+            if (cancellation.IsCancellationRequested == false)
+                _stateMachine.Enter<LoadProgressState>();
         }
+
+        public void Dispose() =>
+            _stateMachine.Dispose();
     }
 }

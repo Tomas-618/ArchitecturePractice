@@ -1,3 +1,4 @@
+using System;
 using JetBrains.Annotations;
 using Source.Data;
 using Source.Data.Contracts;
@@ -5,9 +6,17 @@ using Source.Services.Progress.Contracts;
 
 namespace Source.Services.Progress
 {
-    [UsedImplicitly(ImplicitUseKindFlags.InstantiatedNoFixedConstructorSignature)]
     public class ActiveScene : IProgressSaver, IActiveScene
     {
+        [UsedImplicitly(ImplicitUseKindFlags.InstantiatedNoFixedConstructorSignature)]
+        public ActiveScene(string name)
+        {
+            if (string.IsNullOrEmpty(name))
+                throw new ArgumentNullException(nameof(name));
+
+            Name = name;
+        }
+
         public string Name { get; private set; }
 
         public void Update(string progressName) =>
