@@ -1,25 +1,42 @@
-﻿using Source.Components.Curtain;
-using Source.Infrastructure.Contracts;
-using Source.Infrastructure.Di;
-using UnityEngine;
+﻿using System;
+using System.Threading;
+using Cysharp.Threading.Tasks;
+using JetBrains.Annotations;
+using Source.Infrastructure.StateMachine;
+using Source.Infrastructure.StateMachine.Contracts;
+using Source.Infrastructure.StateMachine.States;
+using Source.Services.Scenes.Constants;
+using Source.Services.Scenes.Contracts;
+using VContainer;
+using VContainer.Unity;
 
 namespace Source.Infrastructure
 {
-    public class Bootstrapper : MonoBehaviour, ICoroutineRunner
+    public class Bootstrapper : IAsyncStartable
     {
-        [SerializeField] private CurtainLoader _curtainLoader;
+        private readonly IGameStateMachine _stateMachine;
+        private readonly ISceneLoader _sceneLoader;
 
-        private Game _game;
-
-        private void Awake()
+        [UsedImplicitly(ImplicitUseKindFlags.InstantiatedNoFixedConstructorSignature)]
+        public Bootstrapper(IObjectResolver container)
         {
-            _game = new Game(this, DiContainer.GetInstance(), _curtainLoader);
+            if (container == null)
+                throw new ArgumentNullException(nameof(container));
 
-            DontDestroyOnLoad(this);
-            DontDestroyOnLoad(_curtainLoader);
+            _stateMachine = new GameStateMachine(container);
+            _sceneLoader = container.Resolve<ISceneLoader>();
         }
 
-        private void OnApplicationQuit() =>
-            _game.Dispose();
+        public async UniTask StartAsync(CancellationToken cancellation)
+        {
+            try
+            {
+                await _sceneLoader.LoadAsync(ScenesNames.InitialScene, cancellation);
+                await _stateMachine.EnterAsync<LoadProgressState>(cancellation);
+            }
+            catch (OperationCanceledException)
+            {
+            }
+        }
     }
 }

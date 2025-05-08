@@ -1,7 +1,9 @@
-﻿using Source.Components.Player.Constants;
-using Source.Infrastructure.Di;
+﻿using System;
+using Source.Components.Camera;
+using Source.Components.Player.Constants;
 using Source.Services.Input.Contracts;
 using UnityEngine;
+using VContainer;
 
 namespace Source.Components.Player
 {
@@ -24,8 +26,15 @@ namespace Source.Components.Player
                 _minAngle = _maxAngle;
         }
 
-        private void Awake() =>
-            _inputService = DiContainer.GetInstance().GetSingle<IInputService>();
+        [Inject]
+        private void Construct(PlayerCamera playerCamera, IInputService inputService)
+        {
+            if (playerCamera == null)
+                throw new ArgumentNullException(nameof(playerCamera));
+
+            playerCamera.SetFollowTarget(CameraTarget);
+            _inputService = inputService ?? throw new ArgumentNullException(nameof(inputService));
+        }
 
         private void LateUpdate()
         {

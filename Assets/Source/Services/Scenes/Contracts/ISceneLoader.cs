@@ -1,9 +1,10 @@
-﻿using System;
+﻿using System.Threading;
+using Cysharp.Threading.Tasks;
 
 namespace Source.Services.Scenes.Contracts
 {
     public interface ISceneLoader
     {
-        void LoadAsync(string name, Action<string> loaded = null);
+        UniTask LoadAsync(string name, CancellationToken cancellationToken);
     }
 }

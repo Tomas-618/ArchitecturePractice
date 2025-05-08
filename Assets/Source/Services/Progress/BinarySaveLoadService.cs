@@ -1,13 +1,14 @@
 ﻿using System;
 using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
+using JetBrains.Annotations;
 using Source.Data;
 using Source.Services.Progress.Contracts;
 using UnityEngine;
 
 namespace Source.Services.Progress
 {
-    public class SaveLoadService : ISaveLoadService
+    public class BinarySaveLoadService : ISaveLoadService
     {
         private const string ProgressKey = "Save";
 
@@ -15,7 +16,8 @@ namespace Source.Services.Progress
         private readonly IProgressRegisterService _progressRegisterService;
         private readonly BinaryFormatter _binaryFormatter;
 
-        public SaveLoadService(IPersistentProgressService persistentProgressService,
+        [UsedImplicitly(ImplicitUseKindFlags.InstantiatedNoFixedConstructorSignature)]
+        public BinarySaveLoadService(IPersistentProgressService persistentProgressService,
             IProgressRegisterService progressRegisterService)
         {
             _persistentProgressService = persistentProgressService ??

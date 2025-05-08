@@ -1,14 +1,16 @@
 ﻿using System;
+using JetBrains.Annotations;
 using Source.Services.Input.Contracts;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
 namespace Source.Services.Input
 {
-    public class InputService : IInputService
+    public class InputService : IInputService, IDisposable
     {
         private readonly InputSystemActions _inputActions;
 
+        [UsedImplicitly(ImplicitUseKindFlags.InstantiatedNoFixedConstructorSignature)]
         public InputService()
         {
             _inputActions = new InputSystemActions();

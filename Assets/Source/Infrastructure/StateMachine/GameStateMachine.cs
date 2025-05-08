@@ -1,13 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading;
+using Cysharp.Threading.Tasks;
 using Source.Components.Curtain;
-using Source.Infrastructure.Di;
 using Source.Infrastructure.StateMachine.Contracts;
 using Source.Infrastructure.StateMachine.States;
 using Source.Infrastructure.StateMachine.States.Contracts;
-using Source.Services.Factories;
+using Source.Services.Factories.Contracts;
 using Source.Services.Progress.Contracts;
 using Source.Services.Scenes.Contracts;
+using VContainer;
 
 namespace Source.Infrastructure.StateMachine
 {
@@ -17,41 +19,38 @@ namespace Source.Infrastructure.StateMachine
 
         private IExitableState _current;
 
-        public GameStateMachine(DiContainer diContainer, ISceneLoader sceneLoader,
-            IActiveScene activeScene, CurtainLoader curtainLoader)
+        public GameStateMachine(IObjectResolver container)
         {
             _states = new Dictionary<Type, IExitableState>
             {
-                [typeof(BootstrapState)] =
-                    new BootstrapState(this, sceneLoader, activeScene, curtainLoader, diContainer),
                 [typeof(LoadProgressState)] = new LoadProgressState(this,
-                    diContainer.GetSingle<IPersistentProgressService>(),
-                    diContainer.GetSingle<ISaveLoadService>()),
-                [typeof(LoadLevelState)] = new LoadLevelState(this, sceneLoader,
-                    diContainer.GetSingle<IPersistentProgressService>(),
-                    diContainer.GetSingle<IProgressRegisterService>(),
-                    diContainer.GetSingle<IActiveScene>(),
-                    diContainer.GetSingle<CurtainLoader>(),
-                    diContainer.GetSingle<PlayerFactory>()),
+                    container.Resolve<IPersistentProgressService>(),
+                    container.Resolve<ISaveLoadService>()),
+                [typeof(LoadLevelState)] = new LoadLevelState(this,
+                    container.Resolve<ISceneLoader>(),
+                    container.Resolve<IPersistentProgressService>(),
+                    container.Resolve<IProgressRegisterService>(),
+                    container.Resolve<IPlayerFactory>(),
+                    container.Resolve<CurtainLoader>()),
                 [typeof(GameLoopState)] = new GameLoopState()
             };
         }
 
-        public void Enter<TState>() where TState : class, IState
+        public async UniTask EnterAsync<TState>(CancellationToken token) where TState : class, IAsyncState
         {
-            IState nextState = GetState<TState>();
+            IAsyncState nextAsyncState = GetState<TState>();
 
-            ChangeState(nextState);
-            nextState.Enter();
+            ChangeState(nextAsyncState);
+            await nextAsyncState.EnterAsync(token);
         }
 
-        public void Enter<TPayLoadedState, TPayload>(TPayload payload)
-            where TPayLoadedState : class, IPayloadedState<TPayload>
+        public async UniTask EnterAsync<TPayLoadedState, TPayload>(TPayload payload, CancellationToken token)
+            where TPayLoadedState : class, IPayloadedAsyncState<TPayload>
         {
-            IPayloadedState<TPayload> nextState = GetState<TPayLoadedState>();
+            IPayloadedAsyncState<TPayload> nextState = GetState<TPayLoadedState>();
 
             ChangeState(nextState);
-            nextState.Enter(payload);
+            await nextState.EnterAsync(payload, token);
         }
 
         private void ChangeState(IExitableState state)

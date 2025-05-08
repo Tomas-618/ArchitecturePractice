@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Threading;
+using Cysharp.Threading.Tasks;
 using Source.Data;
 using Source.Infrastructure.StateMachine.Contracts;
 using Source.Infrastructure.StateMachine.States.Contracts;
@@ -7,7 +9,7 @@ using Source.Services.Scenes.Constants;
 
 namespace Source.Infrastructure.StateMachine.States
 {
-    public class LoadProgressState : IState
+    public class LoadProgressState : IAsyncState
     {
         private readonly IGameStateMachine _gameStateMachine;
         private readonly IPersistentProgressService _progressService;
@@ -21,10 +23,12 @@ namespace Source.Infrastructure.StateMachine.States
             _saveLoadService = saveLoadService ?? throw new ArgumentNullException(nameof(saveLoadService));
         }
 
-        public void Enter()
+        public async UniTask EnterAsync(CancellationToken token)
         {
             LoadOrCreateProgress();
-            _gameStateMachine.Enter<LoadLevelState, string>(_progressService.Progress.SceneName);
+
+            await _gameStateMachine.EnterAsync<LoadLevelState, string>
+                (_progressService.Progress.SceneName, token);
         }
 
         public void Exit()
@@ -38,10 +42,12 @@ namespace Source.Infrastructure.StateMachine.States
                 : CreateProgress();
         }
 
-        private PlayerProgress CreateProgress() =>
-            new()
+        private PlayerProgress CreateProgress()
+        {
+            return new PlayerProgress
             {
                 SceneName = ScenesNames.LaboratoryScene
             };
+        }
     }
 }

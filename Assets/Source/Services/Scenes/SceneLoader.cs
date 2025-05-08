@@ -1,6 +1,7 @@
 ﻿using System;
-using System.Collections;
-using Source.Infrastructure.Contracts;
+using System.Threading;
+using Cysharp.Threading.Tasks;
+using JetBrains.Annotations;
 using Source.Services.Progress.Contracts;
 using Source.Services.Scenes.Contracts;
 using UnityEngine.SceneManagement;
@@ -9,33 +10,19 @@ namespace Source.Services.Scenes
 {
     public class SceneLoader : ISceneLoader
     {
-        private readonly ICoroutineRunner _coroutineRunner;
         private readonly IActiveScene _activeScene;
 
-        public SceneLoader(ICoroutineRunner coroutineRunner, IActiveScene activeScene)
-        {
-            _coroutineRunner = coroutineRunner ?? throw new ArgumentNullException(nameof(coroutineRunner));
+        [UsedImplicitly(ImplicitUseKindFlags.InstantiatedNoFixedConstructorSignature)]
+        public SceneLoader(IActiveScene activeScene) =>
             _activeScene = activeScene ?? throw new ArgumentNullException(nameof(activeScene));
-        }
 
-        public void LoadAsync(string name, Action<string> loaded = null) =>
-            _coroutineRunner.StartCoroutine(LoadScene(name, loaded));
-
-        private IEnumerator LoadScene(string name, Action<string> loaded = null)
+        public async UniTask LoadAsync(string name, CancellationToken cancellationToken)
         {
             if (_activeScene.Name == name)
-            {
-                loaded?.Invoke(name);
+                return;
 
-                yield break;
-            }
-
-            var operation = SceneManager.LoadSceneAsync(name);
-
-            while (operation.isDone == false)
-                yield return null;
-
-            loaded?.Invoke(name);
+            await SceneManager.LoadSceneAsync(name).ToUniTask(cancellationToken: cancellationToken);
+            _activeScene.Update(name);
         }
     }
 }

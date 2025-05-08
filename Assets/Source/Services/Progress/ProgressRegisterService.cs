@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using JetBrains.Annotations;
 using Source.Data;
 using Source.Services.Progress.Contracts;
 using UnityEngine;
@@ -10,6 +11,7 @@ namespace Source.Services.Progress
         private readonly List<IProgressLoader> _loaders;
         private readonly List<IProgressSaver> _savers;
 
+        [UsedImplicitly(ImplicitUseKindFlags.InstantiatedNoFixedConstructorSignature)]
         public ProgressRegisterService()
         {
             _loaders = new List<IProgressLoader>();

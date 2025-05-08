@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace Source.Services.Input.Contracts
 {
-    public interface IInputService : IDisposable
+    public interface IInputService
     {
         event Action SavedButtonPressed;
 

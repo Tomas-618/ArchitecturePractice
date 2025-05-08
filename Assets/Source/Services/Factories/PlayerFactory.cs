@@ -1,31 +1,38 @@
 ﻿using System;
+using System.Threading;
+using Cysharp.Threading.Tasks;
+using JetBrains.Annotations;
 using Source.Components.Player;
+using Source.Data;
 using Source.Services.AssetManagement.Constants;
 using Source.Services.AssetManagement.Contracts;
+using Source.Services.Factories.Contracts;
 using Source.Services.Progress.Contracts;
-using UnityEngine;
+using VContainer;
+using VContainer.Unity;
 
 namespace Source.Services.Factories
 {
-    public class PlayerFactory
+    public class PlayerFactory : IPlayerFactory
     {
         private readonly IAssetProvider _assetProvider;
         private readonly IProgressRegisterService _progressRegisterService;
 
+        [UsedImplicitly(ImplicitUseKindFlags.InstantiatedNoFixedConstructorSignature)]
         public PlayerFactory(IAssetProvider assetProvider, IProgressRegisterService progressRegisterService)
         {
             _assetProvider = assetProvider ?? throw new ArgumentNullException(nameof(assetProvider));
-            _progressRegisterService = progressRegisterService
-                ?? throw new ArgumentNullException(nameof(progressRegisterService));
+            _progressRegisterService = progressRegisterService ??
+                                       throw new ArgumentNullException(nameof(progressRegisterService));
         }
 
-        public PlayerRotator Create(Vector3 position, Quaternion rotation,
-            Transform parent = null)
+        public async UniTask<PlayerPrefab> CreateAsync(IObjectResolver container, SpawnData spawnData, CancellationToken token)
         {
-            var playerPrefab = _assetProvider.LoadPrefab<PlayerRotator>
-                (AssetsPaths.PlayerPath);
+            var playerPrefab = await _assetProvider.LoadAsync<PlayerPrefab>
+                (AssetsPaths.PlayerPath, token);
 
-            var player = UnityEngine.Object.Instantiate(playerPrefab, position, rotation, parent);
+            var player = container.Instantiate(playerPrefab, spawnData.Position,
+                spawnData.Rotation, spawnData.Parent);
 
             _progressRegisterService.RegisterChildrenWatchers(player.gameObject);
 

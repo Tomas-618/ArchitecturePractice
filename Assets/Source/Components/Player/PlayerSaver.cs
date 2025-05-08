@@ -1,7 +1,8 @@
-﻿using Source.Infrastructure.Di;
+﻿using System;
 using Source.Services.Input.Contracts;
 using Source.Services.Progress.Contracts;
 using UnityEngine;
+using VContainer;
 
 namespace Source.Components.Player
 {
@@ -10,12 +11,11 @@ namespace Source.Components.Player
 		private IInputService _inputService;
 		private ISaveLoadService _saveLoadService;
 
-        private void Awake()
+        [Inject]
+        private void Construct(IInputService inputService, ISaveLoadService saveLoadService)
         {
-            var diContainer = DiContainer.GetInstance();
-
-            _inputService = diContainer.GetSingle<IInputService>();
-            _saveLoadService = diContainer.GetSingle<ISaveLoadService>();
+            _inputService = inputService ?? throw new ArgumentNullException(nameof(inputService));
+            _saveLoadService = saveLoadService ?? throw new ArgumentNullException(nameof(saveLoadService));
         }
 
         private void OnEnable() =>

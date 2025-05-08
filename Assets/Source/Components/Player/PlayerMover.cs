@@ -1,11 +1,11 @@
+using System;
 using Source.Data;
 using Source.Data.Contracts;
 using Source.Data.Surrogates;
-using Source.Infrastructure.Di;
 using Source.Services.Input.Contracts;
 using Source.Services.Progress.Contracts;
 using UnityEngine;
-using UnityEngine.SceneManagement;
+using VContainer;
 
 namespace Source.Components.Player
 {
@@ -19,12 +19,11 @@ namespace Source.Components.Player
         private IInputService _inputService;
         private IActiveScene _activeScene;
 
-        private void Awake()
+        [Inject]
+        private void Construct(IInputService inputService, IActiveScene activeScene)
         {
-            var diContainer = DiContainer.GetInstance();
-
-            _inputService = diContainer.GetSingle<IInputService>();
-            _activeScene =  diContainer.GetSingle<IActiveScene>();
+            _inputService = inputService ?? throw new ArgumentNullException(nameof(inputService));
+            _activeScene = activeScene ?? throw new ArgumentNullException(nameof(activeScene));
 
             _transform = transform;
         }
