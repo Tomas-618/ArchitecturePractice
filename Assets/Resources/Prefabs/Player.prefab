@@ -101,7 +101,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 06715b2690fbfdb4b95b6a7781a5d118, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _sensitivity: 7
+  _sensitivity: 8
   _player: {fileID: 8126588909597394619}
   _minAngle: -80
   _maxAngle: 80

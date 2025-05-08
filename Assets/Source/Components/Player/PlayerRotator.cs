@@ -20,12 +20,6 @@ namespace Source.Components.Player
 
         [field: SerializeField] public Transform CameraTarget { get; private set; }
 
-        private void OnValidate()
-        {
-            if (_minAngle > _maxAngle)
-                _minAngle = _maxAngle;
-        }
-
         [Inject]
         private void Construct(PlayerCamera playerCamera, IInputService inputService)
         {
@@ -34,6 +28,12 @@ namespace Source.Components.Player
 
             playerCamera.SetFollowTarget(CameraTarget);
             _inputService = inputService ?? throw new ArgumentNullException(nameof(inputService));
+        }
+
+        private void OnValidate()
+        {
+            if (_minAngle > _maxAngle)
+                _minAngle = _maxAngle;
         }
 
         private void LateUpdate()
