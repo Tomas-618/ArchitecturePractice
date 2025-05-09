@@ -9,5 +9,7 @@ namespace Source.Data.Contracts
         Vector3Surrogate Position { get; }
 
         float Yaw { get; }
+
+        bool IsValid { get; }
     }
 }

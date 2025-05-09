@@ -22,7 +22,7 @@ namespace Source.Services.Scenes
                 return;
 
             await SceneManager.LoadSceneAsync(name).ToUniTask(cancellationToken: cancellationToken);
-            _activeScene.Update(name);
+            _activeScene.Set(name);
         }
     }
 }

@@ -10,7 +10,7 @@ using VContainer;
 
 namespace Source.Components.Player
 {
-    public class PlayerRotator : MonoBehaviour, IProgressSaver
+    public class PlayerRotator : MonoBehaviour, IProgressSaver, IProgressLoader
     {
         [SerializeField, Min(0)] private float _sensitivity;
 
@@ -19,20 +19,18 @@ namespace Source.Components.Player
         [SerializeField] private float _maxAngle;
 
         private IInputService _inputService;
-        private IActiveScene _activeScene;
         private float _pitch;
 
         [field: SerializeField] public Transform CameraTarget { get; private set; }
 
         [Inject]
-        private void Construct(PlayerCamera playerCamera, IInputService inputService, IActiveScene activeScene)
+        private void Construct(PlayerCamera playerCamera, IInputService inputService)
         {
             if (playerCamera == null)
                 throw new ArgumentNullException(nameof(playerCamera));
 
             playerCamera.SetFollowTarget(CameraTarget);
             _inputService = inputService ?? throw new ArgumentNullException(nameof(inputService));
-            _activeScene = activeScene ?? throw new ArgumentNullException(nameof(activeScene));
         }
 
         private void OnValidate()
@@ -54,9 +52,6 @@ namespace Source.Components.Player
 
         public void LoadProgress(IReadOnlyPlayerProgress progress)
         {
-            if (_activeScene.Name != progress.SceneName)
-                return;
-
             var playerRotation = _player.rotation.eulerAngles;
 
             playerRotation.y = progress.Yaw;

@@ -15,13 +15,9 @@ namespace Source.Data.Surrogates
             X = x;
             Y = y;
             Z = z;
-
-            IsValid = true;
         }
 
         public Vector3Surrogate(Vector3 vector) : this(vector.x, vector.y, vector.z) { }
-
-        public bool IsValid { get; }
 
         public readonly Vector3 ConvertToVector3() =>
             new(X, Y, Z);

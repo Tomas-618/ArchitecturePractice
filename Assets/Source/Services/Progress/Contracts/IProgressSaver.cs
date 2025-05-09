@@ -2,7 +2,7 @@
 
 namespace Source.Services.Progress.Contracts
 {
-    public interface IProgressSaver : IProgressLoader
+    public interface IProgressSaver : IProgressWatcher
     {
         void UpdateProgress(PlayerProgress progress);
     }

@@ -1,12 +1,11 @@
 using System;
 using JetBrains.Annotations;
 using Source.Data;
-using Source.Data.Contracts;
-using Source.Services.Progress.Contracts;
+using Source.Services.Scenes.Contracts;
 
-namespace Source.Services.Progress
+namespace Source.Services.Scenes
 {
-    public class ActiveScene : IProgressSaver, IActiveScene
+    public class ActiveScene : IActiveScene
     {
         [UsedImplicitly(ImplicitUseKindFlags.InstantiatedNoFixedConstructorSignature)]
         public ActiveScene(string name)
@@ -19,11 +18,8 @@ namespace Source.Services.Progress
 
         public string Name { get; private set; }
 
-        public void Update(string progressName) =>
+        public void Set(string progressName) =>
             Name = progressName;
-
-        public void LoadProgress(IReadOnlyPlayerProgress progress) =>
-            Update(progress.SceneName);
 
         public void UpdateProgress(PlayerProgress progress) =>
             progress.SceneName = Name;

@@ -47,9 +47,9 @@ namespace Source.Infrastructure.StateMachine.States
         public void Enter(string sceneName)
         {
             _curtainLoader.Show();
-            _progressRegisterService.Clear();
+            _progressRegisterService.ClearWatchers();
 
-            LoadSceneAsync(sceneName).Forget();
+            LoadGameWorldAsync(sceneName).Forget();
         }
 
         public void Exit()
@@ -65,7 +65,7 @@ namespace Source.Infrastructure.StateMachine.States
             _cancellationTokenSource = null;
         }
 
-        private async UniTaskVoid LoadSceneAsync(string sceneName)
+        private async UniTaskVoid LoadGameWorldAsync(string sceneName)
         {
             _cancellationTokenSource = new CancellationTokenSource();
 
@@ -73,12 +73,14 @@ namespace Source.Infrastructure.StateMachine.States
 
             await _sceneLoader.LoadAsync(sceneName, cancellationToken);
 
-            OnLoadedAsync(cancellationToken).Forget();
+            InitGameWorldAsync(cancellationToken).Forget();
         }
 
-        private async UniTaskVoid OnLoadedAsync(CancellationToken token)
+        private async UniTaskVoid InitGameWorldAsync(CancellationToken token)
         {
-            await InitGameWorld(token);
+            _progressRegisterService.RegisterActiveSceneService();
+
+            await CreateEntitiesAsync(token);
             InformProgressLoaders();
 
             _stateMachine.Enter<GameLoopState>();
@@ -87,7 +89,7 @@ namespace Source.Infrastructure.StateMachine.States
         private void InformProgressLoaders() =>
             _progressRegisterService.Load(_persistentProgressService.Progress);
 
-        private async UniTask InitGameWorld(CancellationToken token)
+        private async UniTask CreateEntitiesAsync(CancellationToken token)
         {
             var container = LifetimeScope.Find<LevelLifetimeScope>().Container;
 

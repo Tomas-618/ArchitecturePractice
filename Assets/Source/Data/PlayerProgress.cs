@@ -12,5 +12,7 @@ namespace Source.Data
         public Vector3Surrogate Position { get; set; }
 
         public float Yaw { get; set; }
+
+        public bool IsValid { get; set; }
     }
 }

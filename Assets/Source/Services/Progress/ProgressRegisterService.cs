@@ -2,7 +2,9 @@
 using System.Collections.Generic;
 using JetBrains.Annotations;
 using Source.Data;
+using Source.Data.Contracts;
 using Source.Services.Progress.Contracts;
+using Source.Services.Scenes.Contracts;
 using UnityEngine;
 
 namespace Source.Services.Progress
@@ -11,23 +13,31 @@ namespace Source.Services.Progress
     {
         private readonly List<IProgressLoader> _loaders;
         private readonly List<IProgressSaver> _savers;
+        private readonly IActiveScene _activeScene;
 
         [UsedImplicitly(ImplicitUseKindFlags.InstantiatedNoFixedConstructorSignature)]
-        public ProgressRegisterService()
+        public ProgressRegisterService(IActiveScene activeScene)
         {
             _loaders = new List<IProgressLoader>();
             _savers = new List<IProgressSaver>();
+            _activeScene = activeScene ?? throw new ArgumentNullException(nameof(activeScene));
         }
 
         public event Action Saved;
 
+        public void RegisterActiveSceneService() =>
+            Register(_activeScene);
+
         public void RegisterChildrenWatchers(GameObject gameObject)
         {
-            foreach (var children in gameObject.GetComponentsInChildren<IProgressLoader>())
-                Register(children);
+            var watchers = gameObject
+                .GetComponentsInChildren<IProgressWatcher>();
+
+            for (int i = 0; i < watchers.Length; i++)
+                Register(watchers[i]);
         }
 
-        public void Clear()
+        public void ClearWatchers()
         {
             _loaders.Clear();
             _savers.Clear();
@@ -35,24 +45,30 @@ namespace Source.Services.Progress
 
         public void Update(PlayerProgress progress)
         {
-            foreach (var progressSaver in _savers)
-                progressSaver.UpdateProgress(progress);
+            progress.IsValid = true;
+
+            for (int i = 0; i < _savers.Count; i++)
+                _savers[i].UpdateProgress(progress);
 
             Saved?.Invoke();
         }
 
-        public void Load(PlayerProgress progress)
+        public void Load(IReadOnlyPlayerProgress progress)
         {
-            foreach (var progressLoader in _loaders)
-                progressLoader.LoadProgress(progress);
+            if (progress.IsValid == false || _activeScene.Name != progress.SceneName)
+                return;
+
+            for (int i = 0; i < _loaders.Count; i++)
+                _loaders[i].LoadProgress(progress);
         }
 
-        private void Register(IProgressLoader loader)
+        private void Register(IProgressWatcher watcher)
         {
-            if (loader is IProgressSaver saver)
-                _savers.Add(saver);
+            if (watcher is IProgressLoader loader)
+                _loaders.Add(loader);
 
-            _loaders.Add(loader);
+            if (watcher is IProgressSaver saver)
+                _savers.Add(saver);
         }
     }
 }

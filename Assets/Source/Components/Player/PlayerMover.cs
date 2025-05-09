@@ -9,7 +9,7 @@ using VContainer;
 
 namespace Source.Components.Player
 {
-    public class PlayerMover : MonoBehaviour, IProgressSaver
+    public class PlayerMover : MonoBehaviour, IProgressSaver, IProgressLoader
     {
         [SerializeField, Min(0)] private float _speed;
 
@@ -17,14 +17,11 @@ namespace Source.Components.Player
 
         private Transform _transform;
         private IInputService _inputService;
-        private IActiveScene _activeScene;
 
         [Inject]
-        private void Construct(IInputService inputService, IActiveScene activeScene)
+        private void Construct(IInputService inputService)
         {
             _inputService = inputService ?? throw new ArgumentNullException(nameof(inputService));
-            _activeScene = activeScene ?? throw new ArgumentNullException(nameof(activeScene));
-
             _transform = transform;
         }
 
@@ -41,13 +38,7 @@ namespace Source.Components.Player
 
         public void LoadProgress(IReadOnlyPlayerProgress playerProgress)
         {
-            if (_activeScene.Name != playerProgress.SceneName)
-                return;
-
             var position = playerProgress.Position;
-
-            if (position.IsValid == false)
-                return;
 
             _characterController.enabled = false;
             _transform.position = position.ConvertToVector3();
