@@ -37,9 +37,10 @@ namespace Source.Infrastructure.LifetimeScopes
             builder.Register<IActiveScene, ActiveScene>(Lifetime.Singleton)
                 .WithParameter("name", SceneManager.GetActiveScene().name);
             builder.Register<IPersistentProgressService, PersistentProgressService>(Lifetime.Singleton);
-            builder.Register<IProgressRegisterService, ProgressRegisterService>(Lifetime.Singleton);
+            builder.Register<ProgressRegisterService>(Lifetime.Singleton).AsImplementedInterfaces();
             builder.Register<ISaveLoadService, BinarySaveLoadService>(Lifetime.Singleton);
             builder.Register<IPlayerFactory, PlayerFactory>(Lifetime.Singleton);
+            builder.Register<IHudFactory, HudFactory>(Lifetime.Singleton);
         }
     }
 }

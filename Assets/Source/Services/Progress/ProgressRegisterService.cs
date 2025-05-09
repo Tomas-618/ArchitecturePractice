@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using JetBrains.Annotations;
 using Source.Data;
 using Source.Services.Progress.Contracts;
@@ -6,7 +7,7 @@ using UnityEngine;
 
 namespace Source.Services.Progress
 {
-    public class ProgressRegisterService : IProgressRegisterService
+    public class ProgressRegisterService : IProgressRegisterService, IProgressObservable
     {
         private readonly List<IProgressLoader> _loaders;
         private readonly List<IProgressSaver> _savers;
@@ -17,6 +18,8 @@ namespace Source.Services.Progress
             _loaders = new List<IProgressLoader>();
             _savers = new List<IProgressSaver>();
         }
+
+        public event Action Saved;
 
         public void RegisterChildrenWatchers(GameObject gameObject)
         {
@@ -30,10 +33,12 @@ namespace Source.Services.Progress
             _savers.Clear();
         }
 
-        public void UpdateProgress(PlayerProgress progress)
+        public void Update(PlayerProgress progress)
         {
             foreach (var progressSaver in _savers)
                 progressSaver.UpdateProgress(progress);
+
+            Saved?.Invoke();
         }
 
         public void Load(PlayerProgress progress)

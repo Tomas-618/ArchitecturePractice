@@ -6,20 +6,21 @@ using UnityEngine.InputSystem;
 
 namespace Source.Services.Input
 {
-    public class InputService : IInputService, IDisposable
+    public class InputService : IInputService
     {
         private readonly InputSystemActions _inputActions;
 
         [UsedImplicitly(ImplicitUseKindFlags.InstantiatedNoFixedConstructorSignature)]
-        public InputService()
-        {
+        public InputService() =>
             _inputActions = new InputSystemActions();
 
+        public event Action SavedButtonPressed;
+
+        public void Enable()
+        {
             _inputActions.Enable();
             AddListeners();
         }
-
-        public event Action SavedButtonPressed;
 
         public void Dispose()
         {

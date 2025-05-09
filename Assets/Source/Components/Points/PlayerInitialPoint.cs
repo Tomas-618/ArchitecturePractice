@@ -1,17 +1,19 @@
+using Source.Data;
 using UnityEngine;
 
 namespace Source.Components.Points
 {
     public class PlayerInitialPoint : MonoBehaviour
     {
-        public Vector3 Position { get; private set; }
-
-        public Quaternion Rotation { get; private set; }
+        public SpawnData SpawnData { get; private set; }
 
         private void Awake()
         {
-            Position = transform.position;
-            Rotation = transform.rotation;
+            SpawnData = new SpawnData
+            {
+                Position = transform.position,
+                Rotation = transform.rotation
+            };
         }
     }
 }

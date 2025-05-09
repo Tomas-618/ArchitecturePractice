@@ -26,7 +26,8 @@ namespace Source.Services.Factories
                                        throw new ArgumentNullException(nameof(progressRegisterService));
         }
 
-        public async UniTask<PlayerPrefab> CreateAsync(IObjectResolver container, SpawnData spawnData, CancellationToken token)
+        public async UniTask<PlayerPrefab> CreateAsync(IObjectResolver container, SpawnData spawnData,
+            CancellationToken token)
         {
             var playerPrefab = await _assetProvider.LoadAsync<PlayerPrefab>
                 (AssetsPaths.PlayerPath, token);

@@ -7,5 +7,7 @@ namespace Source.Data.Contracts
         string SceneName { get; }
 
         Vector3Surrogate Position { get; }
+
+        float Yaw { get; }
     }
 }

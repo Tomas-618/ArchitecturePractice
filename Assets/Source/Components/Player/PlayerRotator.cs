@@ -1,13 +1,16 @@
 ﻿using System;
 using Source.Components.Camera;
 using Source.Components.Player.Constants;
+using Source.Data;
+using Source.Data.Contracts;
 using Source.Services.Input.Contracts;
+using Source.Services.Progress.Contracts;
 using UnityEngine;
 using VContainer;
 
 namespace Source.Components.Player
 {
-    public class PlayerRotator : MonoBehaviour
+    public class PlayerRotator : MonoBehaviour, IProgressSaver
     {
         [SerializeField, Min(0)] private float _sensitivity;
 
@@ -16,18 +19,20 @@ namespace Source.Components.Player
         [SerializeField] private float _maxAngle;
 
         private IInputService _inputService;
+        private IActiveScene _activeScene;
         private float _pitch;
 
         [field: SerializeField] public Transform CameraTarget { get; private set; }
 
         [Inject]
-        private void Construct(PlayerCamera playerCamera, IInputService inputService)
+        private void Construct(PlayerCamera playerCamera, IInputService inputService, IActiveScene activeScene)
         {
             if (playerCamera == null)
                 throw new ArgumentNullException(nameof(playerCamera));
 
             playerCamera.SetFollowTarget(CameraTarget);
             _inputService = inputService ?? throw new ArgumentNullException(nameof(inputService));
+            _activeScene = activeScene ?? throw new ArgumentNullException(nameof(activeScene));
         }
 
         private void OnValidate()
@@ -44,7 +49,21 @@ namespace Source.Components.Player
             _player.Rotate(Vector3.up * rotation.x);
         }
 
-        private Vector2 CalculateRotation(Vector3 input)
+        public void UpdateProgress(PlayerProgress progress) =>
+            progress.Yaw = _player.rotation.eulerAngles.y;
+
+        public void LoadProgress(IReadOnlyPlayerProgress progress)
+        {
+            if (_activeScene.Name != progress.SceneName)
+                return;
+
+            var playerRotation = _player.rotation.eulerAngles;
+
+            playerRotation.y = progress.Yaw;
+            _player.rotation = Quaternion.Euler(playerRotation);
+        }
+
+        private Vector2 CalculateRotation(Vector2 input)
         {
             Vector2 rotation = new(0f, _pitch);
 

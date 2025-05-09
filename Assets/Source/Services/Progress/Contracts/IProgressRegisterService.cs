@@ -7,7 +7,7 @@ namespace Source.Services.Progress.Contracts
     {
         void RegisterChildrenWatchers(GameObject gameObject);
 
-        void UpdateProgress(PlayerProgress progress);
+        void Update(PlayerProgress progress);
 
         void Load(PlayerProgress progress);
 

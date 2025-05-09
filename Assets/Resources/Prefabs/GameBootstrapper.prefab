@@ -48,4 +48,4 @@ MonoBehaviour:
     TypeName: 
   autoRun: 1
   autoInjectGameObjects: []
-  _curtainLoader: {fileID: 5486185732008882214, guid: 536a8993c94380646ae9e1dfc7f17208, type: 3}
+  _curtainLoader: {fileID: 8351095388344919044, guid: 536a8993c94380646ae9e1dfc7f17208, type: 3}

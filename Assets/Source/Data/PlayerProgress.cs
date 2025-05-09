@@ -10,5 +10,7 @@ namespace Source.Data
         public string SceneName { get; set; }
 
         public Vector3Surrogate Position { get; set; }
+
+        public float Yaw { get; set; }
     }
 }

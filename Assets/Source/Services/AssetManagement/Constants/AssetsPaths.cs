@@ -3,5 +3,6 @@
     public static class AssetsPaths
     {
         public const string PlayerPath = "Prefabs/Player";
+        public const string HudPath = "Prefabs/HUD";
     }
 }

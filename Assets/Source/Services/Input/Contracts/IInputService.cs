@@ -3,9 +3,11 @@ using UnityEngine;
 
 namespace Source.Services.Input.Contracts
 {
-    public interface IInputService
+    public interface IInputService : IDisposable
     {
         event Action SavedButtonPressed;
+
+        void Enable();
 
         Vector3 GetMoveDirection();
 

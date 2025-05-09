@@ -3,7 +3,6 @@ using System.Threading;
 using Cysharp.Threading.Tasks;
 using Source.Components.Curtain;
 using Source.Components.Points;
-using Source.Data;
 using Source.Infrastructure.LifetimeScopes;
 using Source.Infrastructure.StateMachine.Contracts;
 using Source.Infrastructure.StateMachine.States.Contracts;
@@ -22,14 +21,15 @@ namespace Source.Infrastructure.StateMachine.States
         private readonly IPersistentProgressService _persistentProgressService;
         private readonly IProgressRegisterService _progressRegisterService;
         private readonly CurtainLoader _curtainLoader;
-        private readonly IPlayerFactory _factory;
+        private readonly IPlayerFactory _playerFactory;
+        private readonly IHudFactory _hudFactory;
 
         private CancellationTokenSource _cancellationTokenSource;
 
         public LoadLevelState(IGameStateMachine stateMachine, ISceneLoader sceneLoader,
             IPersistentProgressService persistentProgressService,
             IProgressRegisterService progressRegisterService,
-            IPlayerFactory factory, CurtainLoader curtainLoader)
+            IPlayerFactory factory, IHudFactory hudFactory, CurtainLoader curtainLoader)
         {
             _stateMachine = stateMachine ?? throw new ArgumentNullException(nameof(stateMachine));
             _sceneLoader = sceneLoader ?? throw new ArgumentNullException(nameof(sceneLoader));
@@ -37,10 +37,11 @@ namespace Source.Infrastructure.StateMachine.States
                                          throw new ArgumentNullException(nameof(persistentProgressService));
             _progressRegisterService = progressRegisterService ??
                                        throw new ArgumentNullException(nameof(progressRegisterService));
+            _playerFactory = factory ?? throw new ArgumentNullException(nameof(factory));
+            _hudFactory = hudFactory ?? throw new ArgumentNullException(nameof(hudFactory));
             _curtainLoader = curtainLoader != null
                 ? curtainLoader
                 : throw new ArgumentNullException(nameof(curtainLoader));
-            _factory = factory ?? throw new ArgumentNullException(nameof(factory));
         }
 
         public void Enter(string sceneName)
@@ -92,11 +93,13 @@ namespace Source.Infrastructure.StateMachine.States
 
             var playerInitialPoint = container.Resolve<PlayerInitialPoint>();
 
-            await _factory.CreateAsync(container, new SpawnData
-            {
-                Position = playerInitialPoint.Position,
-                Rotation = playerInitialPoint.Rotation
-            }, token);
+            var playerSpawnTask = _playerFactory.CreateAsync(container, playerInitialPoint.SpawnData,
+                token);
+
+            var hudSpawnTask = _hudFactory.CreateAsync(container, playerInitialPoint.SpawnData,
+                token);
+
+            await UniTask.WhenAll(playerSpawnTask, hudSpawnTask);
         }
     }
 }

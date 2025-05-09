@@ -44,7 +44,7 @@ namespace Source.Components.Player
             if (_activeScene.Name != playerProgress.SceneName)
                 return;
 
-            var position =  playerProgress.Position;
+            var position = playerProgress.Position;
 
             if (position.IsValid == false)
                 return;

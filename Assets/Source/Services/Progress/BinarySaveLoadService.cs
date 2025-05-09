@@ -1,6 +1,8 @@
 ﻿using System;
 using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
+using System.Threading;
+using Cysharp.Threading.Tasks;
 using JetBrains.Annotations;
 using Source.Data;
 using Source.Services.Progress.Contracts;
@@ -21,9 +23,9 @@ namespace Source.Services.Progress
             IProgressRegisterService progressRegisterService)
         {
             _persistentProgressService = persistentProgressService ??
-                throw new ArgumentNullException(nameof(persistentProgressService));
+                                         throw new ArgumentNullException(nameof(persistentProgressService));
             _progressRegisterService = progressRegisterService ??
-                throw new ArgumentNullException(nameof(progressRegisterService));
+                                       throw new ArgumentNullException(nameof(progressRegisterService));
             _binaryFormatter = new BinaryFormatter();
         }
 
@@ -31,7 +33,7 @@ namespace Source.Services.Progress
         {
             var progress = _persistentProgressService.Progress;
 
-            _progressRegisterService.UpdateProgress(progress);
+            _progressRegisterService.Update(progress);
 
             string path = BuildPath(ProgressKey);
 
@@ -40,22 +42,26 @@ namespace Source.Services.Progress
             _binaryFormatter.Serialize(stream, progress);
         }
 
-        public bool TryLoad(out PlayerProgress progress)
+        public async UniTask<PlayerProgress> LoadAsync(CancellationToken cancellationToken)
         {
             string path = BuildPath(ProgressKey);
 
-            progress = null;
-
             if (File.Exists(path) == false)
-                return false;
+                return null;
 
-            using var stream = File.Open(path, FileMode.Open);
+            await using var stream = new FileStream(
+                path,
+                FileMode.Open,
+                FileAccess.Read,
+                FileShare.Read,
+                bufferSize: 4096,
+                useAsync: true);
 
-            progress = _binaryFormatter.Deserialize(stream) as PlayerProgress;
-
-            return progress != null;
+            return await UniTask.RunOnThreadPool(() =>
+                    _binaryFormatter.Deserialize(stream) as PlayerProgress,
+                cancellationToken: cancellationToken);
         }
-        
+
         private string BuildPath(string key) =>
             Path.Combine(Application.persistentDataPath, key);
     }

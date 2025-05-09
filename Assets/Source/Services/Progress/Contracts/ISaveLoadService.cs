@@ -1,4 +1,6 @@
-﻿using Source.Data;
+﻿using System.Threading;
+using Cysharp.Threading.Tasks;
+using Source.Data;
 
 namespace Source.Services.Progress.Contracts
 {
@@ -6,6 +8,6 @@ namespace Source.Services.Progress.Contracts
     {
         void Save();
 
-        bool TryLoad(out PlayerProgress progress);
+        UniTask<PlayerProgress> LoadAsync(CancellationToken cancellationToken);
     }
 }

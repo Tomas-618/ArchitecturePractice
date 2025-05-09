@@ -5,6 +5,7 @@ using Source.Infrastructure.StateMachine.Contracts;
 using Source.Infrastructure.StateMachine.States;
 using Source.Infrastructure.StateMachine.States.Contracts;
 using Source.Services.Factories.Contracts;
+using Source.Services.Input.Contracts;
 using Source.Services.Progress.Contracts;
 using Source.Services.Scenes.Contracts;
 using VContainer;
@@ -29,8 +30,10 @@ namespace Source.Infrastructure.StateMachine
                     container.Resolve<IPersistentProgressService>(),
                     container.Resolve<IProgressRegisterService>(),
                     container.Resolve<IPlayerFactory>(),
+                    container.Resolve<IHudFactory>(),
                     container.Resolve<CurtainLoader>()),
-                [typeof(GameLoopState)] = new GameLoopState()
+                [typeof(GameLoopState)] = new GameLoopState
+                    (container.Resolve<IInputService>())
             };
         }
 
