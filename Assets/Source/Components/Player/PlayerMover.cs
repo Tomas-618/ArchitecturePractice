@@ -11,7 +11,7 @@ namespace Source.Components.Player
 {
     public class PlayerMover : MonoBehaviour, IProgressSaver, IProgressLoader
     {
-        [SerializeField, Min(0)] private float _speed;
+        [SerializeField, Min(0f)] private float _speed;
 
         [SerializeField] private CharacterController _characterController;
 
