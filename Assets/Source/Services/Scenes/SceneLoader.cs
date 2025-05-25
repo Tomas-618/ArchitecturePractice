@@ -2,7 +2,6 @@
 using System.Threading;
 using Cysharp.Threading.Tasks;
 using JetBrains.Annotations;
-using Source.Services.Progress.Contracts;
 using Source.Services.Scenes.Contracts;
 using UnityEngine.SceneManagement;
 

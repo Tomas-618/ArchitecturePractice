@@ -5,7 +5,7 @@ namespace Source.Components.Player
 {
     public class RigidbodyPusher : MonoBehaviour
     {
-        [SerializeField, Min(0)] private float _strength;
+        [SerializeField, Min(0f)] private float _strength;
 
         private void OnControllerColliderHit(ControllerColliderHit hit)
         {

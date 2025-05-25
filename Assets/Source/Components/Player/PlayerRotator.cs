@@ -12,7 +12,7 @@ namespace Source.Components.Player
 {
     public class PlayerRotator : MonoBehaviour, IProgressSaver, IProgressLoader
     {
-        [SerializeField, Min(0)] private float _sensitivity;
+        [SerializeField, Min(0f)] private float _sensitivity;
 
         [SerializeField] private Transform _player;
         [SerializeField] private float _minAngle;

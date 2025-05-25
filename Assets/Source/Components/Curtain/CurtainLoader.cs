@@ -6,7 +6,7 @@ namespace Source.Components.Curtain
 {
     public class CurtainLoader : MonoBehaviour
     {
-        [SerializeField, Min(0)] private float _duration;
+        [SerializeField, Min(0f)] private float _duration;
 
         [SerializeField] private Image _panel;
 

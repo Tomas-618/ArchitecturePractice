@@ -10,9 +10,9 @@ namespace Source.Components.Hud
 {
     public class PlayerSaveText : MonoBehaviour
     {
-        [SerializeField, Min(0)] private float _showDuration;
-        [SerializeField, Min(0)] private float _delay;
-        [SerializeField, Min(0)] private float _hideDuration;
+        [SerializeField, Min(0f)] private float _showDuration;
+        [SerializeField, Min(0f)] private float _delay;
+        [SerializeField, Min(0f)] private float _hideDuration;
 
         [SerializeField] private Text _text;
         [SerializeField] private string _message;
