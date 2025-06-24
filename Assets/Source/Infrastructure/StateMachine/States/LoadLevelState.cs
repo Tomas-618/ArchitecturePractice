@@ -2,7 +2,7 @@
 using System.Threading;
 using Cysharp.Threading.Tasks;
 using Source.Components.Curtain;
-using Source.Components.Points;
+using Source.Components.InitialPoints;
 using Source.Infrastructure.LifetimeScopes;
 using Source.Infrastructure.StateMachine.Contracts;
 using Source.Infrastructure.StateMachine.States.Contracts;
@@ -60,8 +60,11 @@ namespace Source.Infrastructure.StateMachine.States
 
         public void Dispose()
         {
-            _cancellationTokenSource?.Cancel();
-            _cancellationTokenSource?.Dispose();
+            if (_cancellationTokenSource == null)
+                return;
+
+            _cancellationTokenSource.Cancel();
+            _cancellationTokenSource.Dispose();
             _cancellationTokenSource = null;
         }
 
@@ -95,13 +98,13 @@ namespace Source.Infrastructure.StateMachine.States
 
             var playerInitialPoint = container.Resolve<PlayerInitialPoint>();
 
-            var playerSpawnTask = _playerFactory.CreateAsync(container, playerInitialPoint.SpawnData,
+            var playerPrefab = await _playerFactory.CreateAsync(container, playerInitialPoint.SpawnData,
                 token);
 
-            var hudSpawnTask = _hudFactory.CreateAsync(container, playerInitialPoint.SpawnData,
+            var hudPrefab = await _hudFactory.CreateAsync(container, playerInitialPoint.SpawnData,
                 token);
 
-            await UniTask.WhenAll(playerSpawnTask, hudSpawnTask);
+            hudPrefab.Init(playerPrefab.Stamina);
         }
     }
 }

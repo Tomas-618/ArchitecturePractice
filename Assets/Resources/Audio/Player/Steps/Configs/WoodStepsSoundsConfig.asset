@@ -1,0 +1,20 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d6cf79c17a824deeb10523a02b3ca636, type: 3}
+  m_Name: WoodStepsSoundsConfig
+  m_EditorClassIdentifier: 
+  SurfaceType: 2
+  Clips:
+  - {fileID: 8300000, guid: 95047e8d3a3436741aae2de1288e8c8d, type: 3}
+  - {fileID: 8300000, guid: 28883fc6d8126ae4f8f91400e0f89de0, type: 3}
+  - {fileID: 8300000, guid: 59d676392dd944246ab5b0e8517b588d, type: 3}
+  - {fileID: 8300000, guid: bdf5dde69e86bd24898a07018780f997, type: 3}

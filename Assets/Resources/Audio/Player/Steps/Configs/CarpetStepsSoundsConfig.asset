@@ -1,0 +1,20 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d6cf79c17a824deeb10523a02b3ca636, type: 3}
+  m_Name: CarpetStepsSoundsConfig
+  m_EditorClassIdentifier: 
+  SurfaceType: 3
+  Clips:
+  - {fileID: 8300000, guid: 8b0621573ffd1f443b569cb55386c5e6, type: 3}
+  - {fileID: 8300000, guid: 00861d0ee0954074da61ce92e546ff5e, type: 3}
+  - {fileID: 8300000, guid: 18c677767b7308a4a96f071d8e82165e, type: 3}
+  - {fileID: 8300000, guid: 1c244c6e94f92ac4191b385cfa0bb934, type: 3}

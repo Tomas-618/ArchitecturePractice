@@ -1,5 +1,5 @@
 using Source.Components.Camera;
-using Source.Components.Points;
+using Source.Components.InitialPoints;
 using UnityEngine;
 using VContainer;
 using VContainer.Unity;

@@ -2,11 +2,11 @@ using System;
 using System.Threading;
 using Cysharp.Threading.Tasks;
 using JetBrains.Annotations;
+using Source.Components.Hud;
 using Source.Data;
-using Source.Services.AssetManagement.Constants;
-using Source.Services.AssetManagement.Contracts;
+using Source.Services.AssetsManagement.Constants;
+using Source.Services.AssetsManagement.Contracts;
 using Source.Services.Factories.Contracts;
-using UnityEngine;
 using VContainer;
 using VContainer.Unity;
 
@@ -20,10 +20,10 @@ namespace Source.Services.Factories
         public HudFactory(IAssetProvider assetProvider) =>
             _assetProvider = assetProvider ?? throw new ArgumentNullException(nameof(assetProvider));
 
-        public async UniTask<Canvas> CreateAsync(IObjectResolver container, SpawnData spawnData,
+        public async UniTask<HudPrefab> CreateAsync(IObjectResolver container, SpawnData spawnData,
             CancellationToken token)
         {
-            var canvasPrefab = await _assetProvider.LoadAsync<Canvas>(AssetsPaths.HudPath, token);
+            var canvasPrefab = await _assetProvider.LoadAsync<HudPrefab>(AssetsPaths.HudPath, token);
 
             return container.Instantiate(canvasPrefab, spawnData.Position, spawnData.Rotation,
                 spawnData.Parent);

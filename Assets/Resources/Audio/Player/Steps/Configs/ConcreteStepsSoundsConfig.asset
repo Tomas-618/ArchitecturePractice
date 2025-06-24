@@ -1,0 +1,19 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d6cf79c17a824deeb10523a02b3ca636, type: 3}
+  m_Name: ConcreteStepsSoundsConfig
+  m_EditorClassIdentifier: 
+  Clips:
+  - {fileID: 8300000, guid: 289e5b1f22f1a894a9dde2f91512c7d9, type: 3}
+  - {fileID: 8300000, guid: 27010305dc27edd45869fa9064cc7711, type: 3}
+  - {fileID: 8300000, guid: 708d5df20b1464f409782585eab91c33, type: 3}
+  - {fileID: 8300000, guid: 560bcb1546999cc46821fec5630a5edf, type: 3}

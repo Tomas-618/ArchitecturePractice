@@ -7,9 +7,13 @@ namespace Source.Services.Input.Contracts
     {
         event Action SavedButtonPressed;
 
+        event Action CrouchButtonPressed;
+
         void Enable();
 
         Vector3 GetMoveDirection();
+        
+        bool CheckSprintButton();
 
         Vector2 GetRotation();
     }

@@ -1,6 +1,6 @@
 using Source.Components.Curtain;
-using Source.Services.AssetManagement;
-using Source.Services.AssetManagement.Contracts;
+using Source.Services.AssetsManagement;
+using Source.Services.AssetsManagement.Contracts;
 using Source.Services.Factories;
 using Source.Services.Factories.Contracts;
 using Source.Services.Input;
@@ -32,6 +32,7 @@ namespace Source.Infrastructure.LifetimeScopes
         private void RegisterServices(IContainerBuilder builder)
         {
             builder.Register<IInputService, InputService>(Lifetime.Singleton);
+            builder.Register<ISurfaceStepsSoundsProvider, SurfaceStepsSoundsProvider>(Lifetime.Singleton);
             builder.Register<IAssetProvider, ResourcesAssetProvider>(Lifetime.Singleton);
             builder.Register<ISceneLoader, SceneLoader>(Lifetime.Singleton);
             builder.Register<IActiveScene, ActiveScene>(Lifetime.Singleton)

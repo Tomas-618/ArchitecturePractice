@@ -33,8 +33,11 @@ namespace Source.Infrastructure.StateMachine.States
 
         public void Dispose()
         {
-            _cancellationTokenSource?.Cancel();
-            _cancellationTokenSource?.Dispose();
+            if (_cancellationTokenSource == null)
+                return;
+
+            _cancellationTokenSource.Cancel();
+            _cancellationTokenSource.Dispose();
             _cancellationTokenSource = null;
         }
 
