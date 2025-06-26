@@ -2,12 +2,12 @@
 using System.Threading;
 using Cysharp.Threading.Tasks;
 using Source.Data;
-using Source.Infrastructure.StateMachine.Contracts;
-using Source.Infrastructure.StateMachine.States.Contracts;
+using Source.Infrastructure.StateMachine.Global.Contracts;
+using Source.Infrastructure.StateMachine.Global.States.Contracts;
 using Source.Services.Progress.Contracts;
 using Source.Services.Scenes.Constants;
 
-namespace Source.Infrastructure.StateMachine.States
+namespace Source.Infrastructure.StateMachine.Global.States
 {
     public class LoadProgressState : IState
     {

@@ -4,30 +4,25 @@ namespace Source.Components.Player
 {
     public class PlayerSpeed : MonoBehaviour
     {
-        [SerializeField, Min(0f)] private float _onMove;
+        [SerializeField, Min(0f)] private float _onWalking;
         [SerializeField, Min(0f)] private float _onRunning;
-        [SerializeField, Min(0f)] private float _onCrouch;
+        [SerializeField, Min(0f)] private float _onCrouching;
 
-        [SerializeField] private PlayerRun _playerRun;
-        [SerializeField] private PlayerCrouch _playerCrouch;
-
-        [field: SerializeField, Min(0f)] public float SqrSpeedToReduceStamina { get; private set; }
+        public float CurrentSpeed { get; private set; }
 
         private void OnValidate()
         {
-            _onCrouch = Mathf.Min(_onMove, _onRunning, _onCrouch);
-            _onRunning = Mathf.Max(_onMove, _onRunning, _onCrouch);
+            _onCrouching = Mathf.Min(_onWalking, _onRunning, _onCrouching);
+            _onRunning = Mathf.Max(_onWalking, _onRunning, _onCrouching);
         }
 
-        public float GetCurrent()
-        {
-            if (_playerRun.CheckRunning())
-                return _onRunning;
+        public void SetOnWalking() =>
+            CurrentSpeed = _onWalking;
 
-            if (_playerCrouch.CheckCrouching())
-                return _onCrouch;
+        public void SetOnRunning() =>
+            CurrentSpeed = _onRunning;
 
-            return _onMove;
-        }
+        public void SetOnCrouching() =>
+            CurrentSpeed = _onCrouching;
     }
 }

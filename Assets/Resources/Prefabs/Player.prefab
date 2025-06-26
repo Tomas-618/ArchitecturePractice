@@ -94,6 +94,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _radius: 0.5
   _distance: 0.2
+  _transform: {fileID: 8990248138169635446}
   _direction: {x: 0, y: 1, z: 0}
   _layerMask:
     serializedVersion: 2
@@ -241,10 +242,11 @@ GameObject:
   - component: {fileID: -8797260005732730894}
   - component: {fileID: 5305066248260304243}
   - component: {fileID: 3561966398740731062}
+  - component: {fileID: 8846975213913005868}
+  - component: {fileID: 3197540305611211214}
   - component: {fileID: 722660942335622718}
   - component: {fileID: 7181705148063918891}
   - component: {fileID: 8962878022142105453}
-  - component: {fileID: 3197540305611211214}
   - component: {fileID: 7217153935867824017}
   - component: {fileID: 8678794925083885528}
   - component: {fileID: 4383125585870209756}
@@ -333,6 +335,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d834e57857a6492ea8b38258b6b664b8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  <MovementLifeCycle>k__BackingField: {fileID: 8846975213913005868}
+  <Speed>k__BackingField: {fileID: 3197540305611211214}
+  <Crouch>k__BackingField: {fileID: 722660942335622718}
+  <Run>k__BackingField: {fileID: 7181705148063918891}
   <Stamina>k__BackingField: {fileID: 8962878022142105453}
 --- !u!114 &5305066248260304243
 MonoBehaviour:
@@ -348,7 +354,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _characterController: {fileID: 337774649307769705}
   _playerSpeed: {fileID: 3197540305611211214}
-  _playerStamina: {fileID: 8962878022142105453}
 --- !u!114 &3561966398740731062
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -366,6 +371,34 @@ MonoBehaviour:
   _minAngle: -80
   _maxAngle: 80
   <CameraTarget>k__BackingField: {fileID: 8976042274614285841}
+--- !u!114 &8846975213913005868
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5159279637407745592}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 864cb16c38064f5093cfda9638e75320, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &3197540305611211214
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5159279637407745592}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3997fdac264746708c7f2e7f76b02676, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _onWalking: 3
+  _onRunning: 5
+  _onCrouching: 1.3
+  <SqrSpeedToReduceStamina>k__BackingField: 12
 --- !u!114 &722660942335622718
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -380,7 +413,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _animator: {fileID: 7217153935867824017}
   _overhangChecker: {fileID: 4654560737665527242}
-  _playerRun: {fileID: 7181705148063918891}
 --- !u!114 &7181705148063918891
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -393,8 +425,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b5780620d4b54f3a851b8cc1f7a562e3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _characterController: {fileID: 337774649307769705}
-  _playerCrouch: {fileID: 722660942335622718}
 --- !u!114 &8962878022142105453
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -410,24 +440,6 @@ MonoBehaviour:
   _increaseValue: 5
   _increaseDelay: 3
   <MaxValue>k__BackingField: 30
---- !u!114 &3197540305611211214
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5159279637407745592}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3997fdac264746708c7f2e7f76b02676, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _onMove: 3
-  _onRunning: 5
-  _onCrouch: 1.3
-  _playerRun: {fileID: 7181705148063918891}
-  _playerCrouch: {fileID: 722660942335622718}
-  <SqrSpeedToReduceStamina>k__BackingField: 12
 --- !u!114 &7217153935867824017
 MonoBehaviour:
   m_ObjectHideFlags: 0

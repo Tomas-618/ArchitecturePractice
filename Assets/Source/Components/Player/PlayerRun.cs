@@ -7,24 +7,14 @@ namespace Source.Components.Player
 {
     public class PlayerRun : MonoBehaviour
     {
-        [SerializeField] private CharacterController _characterController;
-        [SerializeField] private PlayerCrouch _playerCrouch;
-
         private IInputService _inputService;
 
         [Inject]
         private void Construct(IInputService inputService) =>
             _inputService = inputService ?? throw new ArgumentNullException(nameof(inputService));
 
-        public bool CheckRunning()
-        {
-            bool isRunning = _inputService.CheckSprintButton()
-                             && _characterController.velocity.sqrMagnitude > 0f;
-
-            if (isRunning)
-                _playerCrouch.StandUp();
-
-            return isRunning && _playerCrouch.IsStanding;
-        }
+        public bool CheckRunning() =>
+            _inputService.CheckSprintButton()
+            && _inputService.GetMoveDirection().sqrMagnitude > 0f;
     }
 }

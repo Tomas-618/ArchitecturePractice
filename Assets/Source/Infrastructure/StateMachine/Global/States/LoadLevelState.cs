@@ -4,15 +4,16 @@ using Cysharp.Threading.Tasks;
 using Source.Components.Curtain;
 using Source.Components.InitialPoints;
 using Source.Infrastructure.LifetimeScopes;
-using Source.Infrastructure.StateMachine.Contracts;
-using Source.Infrastructure.StateMachine.States.Contracts;
+using Source.Infrastructure.StateMachine.Global.Contracts;
+using Source.Infrastructure.StateMachine.Global.States.Contracts;
+using Source.Services.Factories;
 using Source.Services.Factories.Contracts;
 using Source.Services.Progress.Contracts;
 using Source.Services.Scenes.Contracts;
 using VContainer;
 using VContainer.Unity;
 
-namespace Source.Infrastructure.StateMachine.States
+namespace Source.Infrastructure.StateMachine.Global.States
 {
     public class LoadLevelState : IPayloadedState<string>
     {
@@ -100,6 +101,11 @@ namespace Source.Infrastructure.StateMachine.States
 
             var playerPrefab = await _playerFactory.CreateAsync(container, playerInitialPoint.SpawnData,
                 token);
+
+            var playerMovementStateMachineFactory = new PlayerMovementStateMachineFactory(playerPrefab.Speed,
+                playerPrefab.Crouch, playerPrefab.Run);
+
+            playerPrefab.MovementLifeCycle.Init(playerMovementStateMachineFactory);
 
             var hudPrefab = await _hudFactory.CreateAsync(container, playerInitialPoint.SpawnData,
                 token);

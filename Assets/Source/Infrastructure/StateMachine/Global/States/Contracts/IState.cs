@@ -1,4 +1,4 @@
-namespace Source.Infrastructure.StateMachine.States.Contracts
+namespace Source.Infrastructure.StateMachine.Global.States.Contracts
 {
     public interface IState : IExitableState
     {

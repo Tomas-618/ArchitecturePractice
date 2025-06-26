@@ -1,7 +1,7 @@
 ﻿using System;
-using Source.Infrastructure.StateMachine.States.Contracts;
+using Source.Infrastructure.StateMachine.Global.States.Contracts;
 
-namespace Source.Infrastructure.StateMachine.Contracts
+namespace Source.Infrastructure.StateMachine.Global.Contracts
 {
     public interface IGameStateMachine : IDisposable
     {

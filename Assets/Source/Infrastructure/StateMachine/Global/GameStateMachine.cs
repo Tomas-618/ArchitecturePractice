@@ -1,16 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
 using Source.Components.Curtain;
-using Source.Infrastructure.StateMachine.Contracts;
-using Source.Infrastructure.StateMachine.States;
-using Source.Infrastructure.StateMachine.States.Contracts;
+using Source.Infrastructure.StateMachine.Global.Contracts;
+using Source.Infrastructure.StateMachine.Global.States;
+using Source.Infrastructure.StateMachine.Global.States.Contracts;
 using Source.Services.Factories.Contracts;
 using Source.Services.Input.Contracts;
 using Source.Services.Progress.Contracts;
 using Source.Services.Scenes.Contracts;
 using VContainer;
 
-namespace Source.Infrastructure.StateMachine
+namespace Source.Infrastructure.StateMachine.Global
 {
     public class GameStateMachine : IGameStateMachine
     {

@@ -13,9 +13,10 @@ namespace Source.Components.Player
 
         [SerializeField] private PlayerAnimator _animator;
         [SerializeField] private SphereCastChecker _overhangChecker;
-        [SerializeField] private PlayerRun _playerRun;
 
         private IInputService _inputService;
+
+        public bool IsCrouching => IsStanding == false;
 
         public bool IsStanding => _animator.CurrentState == PlayerAnimatorState.Idle;
 
@@ -31,20 +32,14 @@ namespace Source.Components.Player
         private void OnDisable() =>
             _inputService.CrouchButtonPressed -= OnCrouchButtonPressed;
 
-        public bool CheckCrouching() =>
-            IsStanding == false;
-
         public void StandUp()
         {
             if (_overhangChecker.Check(_hits) == false)
                 _animator.PlayStandAnimation();
         }
 
-        public void SitDown()
-        {
-            if (_playerRun.CheckRunning() == false)
-                _animator.PlaySitAnimation();
-        }
+        private void SitDown() =>
+            _animator.PlaySitAnimation();
 
         private void OnCrouchButtonPressed()
         {

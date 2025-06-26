@@ -1,5 +1,4 @@
 using System;
-using Source.Components.Player.Constants;
 using Source.Data;
 using Source.Data.Contracts;
 using Source.Data.Surrogates;
@@ -14,7 +13,6 @@ namespace Source.Components.Player
     {
         [SerializeField] private CharacterController _characterController;
         [SerializeField] private PlayerSpeed _playerSpeed;
-        [SerializeField] private PlayerStamina _playerStamina;
 
         private Transform _transform;
         private IInputService _inputService;
@@ -30,14 +28,9 @@ namespace Source.Components.Player
         {
             var direction = _inputService.GetMoveDirection();
 
-            float speed = _playerSpeed.GetCurrent();
+            float speed = _playerSpeed.CurrentSpeed;
 
             var movement = speed * _transform.TransformDirection(direction);
-
-            if (movement.sqrMagnitude > _playerSpeed.SqrSpeedToReduceStamina)
-                _playerStamina.Reduce(movement.sqrMagnitude * PlayerConstants.StaminaReduceFactor);
-            else
-                _playerStamina.StartRestoring();
 
             _characterController.SimpleMove(movement);
         }
