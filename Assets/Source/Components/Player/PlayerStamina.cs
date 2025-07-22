@@ -1,5 +1,3 @@
-using System.Threading;
-using Cysharp.Threading.Tasks;
 using R3;
 using UnityEngine;
 
@@ -10,8 +8,9 @@ namespace Source.Components.Player
         [SerializeField, Min(0f)] private float _increaseValue;
         [SerializeField, Min(0f)] private float _increaseDelay;
 
-        private CancellationTokenSource _cancellationTokenSource;
         private ReactiveProperty<float> _currentValue;
+        private float _increaseTimer;
+        private bool _isRestoring;
 
         [field: SerializeField, Min(0f)] public float MaxValue { get; private set; }
 
@@ -19,57 +18,50 @@ namespace Source.Components.Player
 
         public bool HasRunOut => _currentValue.Value <= 0;
 
-        private void Awake() =>
+        private void Awake()
+        {
             _currentValue = new ReactiveProperty<float>(MaxValue);
+            _isRestoring = true;
+        }
 
-        private void OnDisable() =>
-            DisposeCancellationTokenSource();
+        private void Update() =>
+            Restore();
+
+        private void Restore()
+        {
+            if (_isRestoring == false)
+                return;
+
+            if (HasRunOut && CheckRestoreCooldown() == false)
+                return;
+
+            _currentValue.Value = Mathf.MoveTowards(_currentValue.Value,
+                MaxValue, _increaseValue * Time.deltaTime);
+        }
 
         public void Reduce(float amount)
         {
             if (amount < 0)
                 return;
 
-            DisposeCancellationTokenSource();
-            _currentValue.Value = Mathf.Max(_currentValue.Value - amount * Time.deltaTime, 0);
+            _isRestoring = false;
+            _currentValue.Value = Mathf.MoveTowards(_currentValue.Value,
+                0, amount * Time.deltaTime);
         }
 
-        public void StartRestoring()
+        public void StartRestoring() =>
+            _isRestoring = true;
+
+        private bool CheckRestoreCooldown()
         {
-            if (_cancellationTokenSource != null)
-                return;
+            float time = Time.time;
 
-            RestoreAsync().Forget();
-        }
+            if (time - _increaseTimer < _increaseDelay)
+                return false;
 
-        private async UniTaskVoid RestoreAsync()
-        {
-            _cancellationTokenSource = new CancellationTokenSource();
+            _increaseTimer = time;
 
-            await ProcessRestoring(_cancellationTokenSource.Token);
-            DisposeCancellationTokenSource();
-        }
-
-        private async UniTask ProcessRestoring(CancellationToken token)
-        {
-            if (HasRunOut)
-                await UniTask.WaitForSeconds(_increaseDelay, cancellationToken: token);
-
-            while (_currentValue.Value < MaxValue)
-            {
-                _currentValue.Value = Mathf.Min(_currentValue.Value + _increaseValue * Time.deltaTime, MaxValue);
-                await UniTask.NextFrame(cancellationToken: token);
-            }
-        }
-
-        private void DisposeCancellationTokenSource()
-        {
-            if (_cancellationTokenSource == null)
-                return;
-
-            _cancellationTokenSource.Cancel();
-            _cancellationTokenSource.Dispose();
-            _cancellationTokenSource = null;
+            return true;
         }
     }
 }

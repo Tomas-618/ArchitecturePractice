@@ -9,7 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7898413402909562301}
-  - component: {fileID: 8086912344360940370}
+  - component: {fileID: 9040116989378242998}
   m_Layer: 0
   m_Name: GroundChecker
   m_TagString: Untagged
@@ -32,7 +32,7 @@ Transform:
   m_Children: []
   m_Father: {fileID: 8126588909597394619}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &8086912344360940370
+--- !u!114 &9040116989378242998
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -41,7 +41,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 475618646819778846}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b6d8b9b763e141698b5f96a6a0e7fa8a, type: 3}
+  m_Script: {fileID: 11500000, guid: b7137aa3761c47dfba636e207f0285d9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   _radius: 0.5
@@ -94,7 +94,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _radius: 0.5
   _distance: 0.2
-  _transform: {fileID: 8990248138169635446}
   _direction: {x: 0, y: 1, z: 0}
   _layerMask:
     serializedVersion: 2
@@ -398,7 +397,6 @@ MonoBehaviour:
   _onWalking: 3
   _onRunning: 5
   _onCrouching: 1.3
-  <SqrSpeedToReduceStamina>k__BackingField: 12
 --- !u!114 &722660942335622718
 MonoBehaviour:
   m_ObjectHideFlags: 0

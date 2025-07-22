@@ -16,10 +16,7 @@ namespace Source.Services.Scenes
             Name = name;
         }
 
-        public string Name { get; private set; }
-
-        public void Set(string progressName) =>
-            Name = progressName;
+        public string Name { get; set; }
 
         public void UpdateProgress(PlayerProgress progress) =>
             progress.SceneName = Name;

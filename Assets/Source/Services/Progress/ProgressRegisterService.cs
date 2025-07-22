@@ -13,10 +13,10 @@ namespace Source.Services.Progress
     {
         private readonly List<IProgressLoader> _loaders;
         private readonly List<IProgressSaver> _savers;
-        private readonly IActiveScene _activeScene;
+        private readonly IReadOnlyActiveScene _activeScene;
 
         [UsedImplicitly(ImplicitUseKindFlags.InstantiatedNoFixedConstructorSignature)]
-        public ProgressRegisterService(IActiveScene activeScene)
+        public ProgressRegisterService(IReadOnlyActiveScene activeScene)
         {
             _loaders = new List<IProgressLoader>();
             _savers = new List<IProgressSaver>();

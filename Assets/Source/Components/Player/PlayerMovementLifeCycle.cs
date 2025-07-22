@@ -1,5 +1,5 @@
 using System;
-using Source.Infrastructure.StateMachine.LifeCycle;
+using Source.Infrastructure.StateMachine.LifeCycle.Contracts;
 using Source.Services.Factories.Contracts;
 using UnityEngine;
 
@@ -7,7 +7,7 @@ namespace Source.Components.Player
 {
     public class PlayerMovementLifeCycle : MonoBehaviour
     {
-        private GameLoopStateMachine _stateMachine;
+        private IGameLoopStateMachine _stateMachine;
 
         public void Init(IGameLoopStateMachineFactory stateMachineFactory)
         {

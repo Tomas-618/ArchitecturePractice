@@ -35,7 +35,8 @@ namespace Source.Infrastructure.LifetimeScopes
             builder.Register<ISurfaceStepsSoundsProvider, SurfaceStepsSoundsProvider>(Lifetime.Singleton);
             builder.Register<IAssetProvider, ResourcesAssetProvider>(Lifetime.Singleton);
             builder.Register<ISceneLoader, SceneLoader>(Lifetime.Singleton);
-            builder.Register<IActiveScene, ActiveScene>(Lifetime.Singleton)
+            builder.Register<ActiveScene>(Lifetime.Singleton)
+                .As<IReadOnlyActiveScene, IActiveScene>()
                 .WithParameter("name", SceneManager.GetActiveScene().name);
             builder.Register<IPersistentProgressService, PersistentProgressService>(Lifetime.Singleton);
             builder.Register<ProgressRegisterService>(Lifetime.Singleton).AsImplementedInterfaces();

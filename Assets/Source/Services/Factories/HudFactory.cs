@@ -3,6 +3,7 @@ using System.Threading;
 using Cysharp.Threading.Tasks;
 using JetBrains.Annotations;
 using Source.Components.Hud;
+using Source.Components.Player;
 using Source.Data;
 using Source.Services.AssetsManagement.Constants;
 using Source.Services.AssetsManagement.Contracts;
@@ -21,12 +22,16 @@ namespace Source.Services.Factories
             _assetProvider = assetProvider ?? throw new ArgumentNullException(nameof(assetProvider));
 
         public async UniTask<HudPrefab> CreateAsync(IObjectResolver container, SpawnData spawnData,
-            CancellationToken token)
+            PlayerStamina playerStamina, CancellationToken token)
         {
             var canvasPrefab = await _assetProvider.LoadAsync<HudPrefab>(AssetsPaths.HudPath, token);
 
-            return container.Instantiate(canvasPrefab, spawnData.Position, spawnData.Rotation,
+            var hudPrefab = container.Instantiate(canvasPrefab, spawnData.Position, spawnData.Rotation,
                 spawnData.Parent);
+
+            hudPrefab.Init(playerStamina);
+
+            return hudPrefab;
         }
     }
 }

@@ -35,6 +35,10 @@ namespace Source.Services.Factories
             var player = container.Instantiate(playerPrefab, spawnData.Position,
                 spawnData.Rotation, spawnData.Parent);
 
+            var playerMovementStateMachineFactory = new PlayerMovementStateMachineFactory(player.Speed,
+                player.Crouch, player.Run, player.Stamina);
+
+            player.Init(playerMovementStateMachineFactory);
             _progressRegisterService.RegisterChildrenWatchers(player.gameObject);
 
             return player;

@@ -6,7 +6,6 @@ using Source.Components.InitialPoints;
 using Source.Infrastructure.LifetimeScopes;
 using Source.Infrastructure.StateMachine.Global.Contracts;
 using Source.Infrastructure.StateMachine.Global.States.Contracts;
-using Source.Services.Factories;
 using Source.Services.Factories.Contracts;
 using Source.Services.Progress.Contracts;
 using Source.Services.Scenes.Contracts;
@@ -99,18 +98,11 @@ namespace Source.Infrastructure.StateMachine.Global.States
 
             var playerInitialPoint = container.Resolve<PlayerInitialPoint>();
 
-            var playerPrefab = await _playerFactory.CreateAsync(container, playerInitialPoint.SpawnData,
+            var player = await _playerFactory.CreateAsync(container, playerInitialPoint.SpawnData,
                 token);
 
-            var playerMovementStateMachineFactory = new PlayerMovementStateMachineFactory(playerPrefab.Speed,
-                playerPrefab.Crouch, playerPrefab.Run);
-
-            playerPrefab.MovementLifeCycle.Init(playerMovementStateMachineFactory);
-
-            var hudPrefab = await _hudFactory.CreateAsync(container, playerInitialPoint.SpawnData,
+            await _hudFactory.CreateAsync(container, playerInitialPoint.SpawnData, player.Stamina,
                 token);
-
-            hudPrefab.Init(playerPrefab.Stamina);
         }
     }
 }

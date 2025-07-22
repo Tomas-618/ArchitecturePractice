@@ -1,3 +1,4 @@
+using Source.Services.Factories.Contracts;
 using UnityEngine;
 
 namespace Source.Components.Player
@@ -13,5 +14,8 @@ namespace Source.Components.Player
         [field: SerializeField] public PlayerRun Run { get; private set; }
 
         [field: SerializeField] public PlayerStamina Stamina { get; private set; }
+
+        public void Init(IGameLoopStateMachineFactory stateMachineFactory) =>
+            MovementLifeCycle.Init(stateMachineFactory);
     }
 }

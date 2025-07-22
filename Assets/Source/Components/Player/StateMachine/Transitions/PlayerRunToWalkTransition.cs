@@ -6,11 +6,16 @@ namespace Source.Components.Player.StateMachine.Transitions
     public class PlayerRunToWalkTransition : GameLoopTransition
     {
         private readonly PlayerRun _playerRun;
+        private readonly PlayerStamina _playerStamina;
 
-        public PlayerRunToWalkTransition(PlayerRun playerRun, GameLoopState nextState) : base(nextState) =>
+        public PlayerRunToWalkTransition(PlayerRun playerRun, PlayerStamina playerStamina,
+            GameLoopState nextState) : base(nextState)
+        {
             _playerRun = playerRun ?? throw new ArgumentNullException(nameof(playerRun));
+            _playerStamina = playerStamina ?? throw new ArgumentNullException(nameof(playerStamina));
+        }
 
         protected override bool CheckCondition() =>
-            _playerRun.CheckRunning() == false;
+            _playerRun.CheckRunning() == false || _playerStamina.HasRunOut;
     }
 }

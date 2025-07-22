@@ -20,8 +20,10 @@ namespace Source.Services.Scenes
             if (_activeScene.Name == name)
                 return;
 
-            await SceneManager.LoadSceneAsync(name).ToUniTask(cancellationToken: cancellationToken);
-            _activeScene.Set(name);
+            await SceneManager.LoadSceneAsync(name)
+                .ToUniTask(cancellationToken: cancellationToken);
+
+            _activeScene.Name = name;
         }
     }
 }

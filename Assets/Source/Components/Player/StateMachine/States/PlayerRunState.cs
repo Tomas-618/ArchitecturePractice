@@ -7,12 +7,14 @@ namespace Source.Components.Player.StateMachine.States
     {
         private readonly PlayerSpeed _playerSpeed;
         private readonly PlayerCrouch _playerCrouch;
+        private readonly PlayerStamina _playerStamina;
 
         public PlayerRunState(PlayerSpeed playerSpeed, PlayerCrouch playerCrouch,
-            int transitionsCapacity) : base(transitionsCapacity)
+            PlayerStamina playerStamina, int transitionsCapacity) : base(transitionsCapacity)
         {
             _playerSpeed = playerSpeed ?? throw new ArgumentNullException(nameof(playerSpeed));
             _playerCrouch = playerCrouch ?? throw new ArgumentNullException(nameof(playerCrouch));
+            _playerStamina = playerStamina ?? throw new ArgumentNullException(nameof(playerStamina));
         }
 
         public override void Enter()
@@ -21,7 +23,15 @@ namespace Source.Components.Player.StateMachine.States
             _playerCrouch.enabled = false;
         }
 
-        public override void Exit() =>
+        public override void Update()
+        {
+            _playerStamina.Reduce(5f);
+        }
+
+        public override void Exit()
+        {
+            _playerStamina.StartRestoring();
             _playerCrouch.enabled = true;
+        }
     }
 }

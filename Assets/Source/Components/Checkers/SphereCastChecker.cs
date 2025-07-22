@@ -7,9 +7,13 @@ namespace Source.Components.Checkers
         [SerializeField, Min(0f)] private float _radius;
         [SerializeField, Min(0f)] private float _distance;
 
-        [SerializeField] private Transform _transform;
         [SerializeField] private Vector3 _direction;
         [SerializeField] private LayerMask _layerMask;
+
+        private Transform _transform;
+
+        private void Awake() =>
+            _transform = transform;
 
         public bool Check(RaycastHit[] hits)
         {
