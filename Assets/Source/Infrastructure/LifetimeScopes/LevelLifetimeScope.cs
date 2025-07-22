@@ -1,5 +1,7 @@
 using Source.Components.Camera;
 using Source.Components.InitialPoints;
+using Source.Services.Factories;
+using Source.Services.Factories.Contracts;
 using UnityEngine;
 using VContainer;
 using VContainer.Unity;
@@ -13,6 +15,8 @@ namespace Source.Infrastructure.LifetimeScopes
 
         protected override void Configure(IContainerBuilder builder)
         {
+            builder.Register<IPlayerMovementStateMachineFactory,
+                PlayerMovementStateMachineFactory>(Lifetime.Singleton);
             builder.RegisterComponent(_playerInitialPoint);
             builder.RegisterComponent(_playerCamera);
         }

@@ -334,10 +334,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d834e57857a6492ea8b38258b6b664b8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  <MovementLifeCycle>k__BackingField: {fileID: 8846975213913005868}
-  <Speed>k__BackingField: {fileID: 3197540305611211214}
-  <Crouch>k__BackingField: {fileID: 722660942335622718}
-  <Run>k__BackingField: {fileID: 7181705148063918891}
   <Stamina>k__BackingField: {fileID: 8962878022142105453}
 --- !u!114 &5305066248260304243
 MonoBehaviour:
@@ -382,6 +378,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 864cb16c38064f5093cfda9638e75320, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _playerSpeed: {fileID: 3197540305611211214}
+  _playerCrouch: {fileID: 722660942335622718}
+  _playerRun: {fileID: 7181705148063918891}
+  _playerStamina: {fileID: 8962878022142105453}
 --- !u!114 &3197540305611211214
 MonoBehaviour:
   m_ObjectHideFlags: 0
