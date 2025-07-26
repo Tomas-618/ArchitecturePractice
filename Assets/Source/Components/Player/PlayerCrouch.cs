@@ -9,10 +9,8 @@ namespace Source.Components.Player
 {
     public class PlayerCrouch : MonoBehaviour
     {
-        private readonly RaycastHit[] _hits = new RaycastHit[1];
-
         [SerializeField] private PlayerAnimator _animator;
-        [SerializeField] private SphereCastChecker _overhangChecker;
+        [SerializeField] private PlayerOverhangChecker _overhangChecker;
 
         private IInputService _inputService;
 
@@ -34,7 +32,7 @@ namespace Source.Components.Player
 
         public void StandUp()
         {
-            if (_overhangChecker.Check(_hits) == false)
+            if (_overhangChecker.Check() == false)
                 _animator.PlayStandAnimation();
         }
 

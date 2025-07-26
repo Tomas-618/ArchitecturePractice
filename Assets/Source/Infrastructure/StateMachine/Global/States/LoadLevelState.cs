@@ -20,9 +20,9 @@ namespace Source.Infrastructure.StateMachine.Global.States
         private readonly ISceneLoader _sceneLoader;
         private readonly IPersistentProgressService _persistentProgressService;
         private readonly IProgressRegisterService _progressRegisterService;
-        private readonly CurtainLoader _curtainLoader;
         private readonly IPlayerFactory _playerFactory;
         private readonly IHudFactory _hudFactory;
+        private readonly CurtainLoader _curtainLoader;
 
         private CancellationTokenSource _cancellationTokenSource;
 
