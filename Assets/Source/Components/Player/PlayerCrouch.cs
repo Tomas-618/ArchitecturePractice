@@ -1,5 +1,4 @@
 using System;
-using Source.Components.Checkers;
 using Source.Components.Player.Data;
 using Source.Services.Input.Contracts;
 using UnityEngine;
